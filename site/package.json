@@ -1,0 +1,8 @@
+{
+  "name": "suneunglab-site",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": { "build": "astro build", "dev": "astro dev" },
+  "dependencies": { "astro": "5.18.1", "katex": "0.16.11", "js-yaml": "4.1.0" }
+}

@@ -22,3 +22,5 @@ __pycache__/
 .env
 .env.*
 *.key
+# 사이트 점검 캡처
+site/tools/shots/

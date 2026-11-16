@@ -1,0 +1,53 @@
+---
+import Base from '../../../../layouts/Base.astro';
+export function getStaticPaths() {
+  return [
+    { params: { track: 'g1', cohort: '2029', date: '2026-11-09' }, props: { label: '고1 · 2029 수능', exam: '2028-11-16' } },
+    { params: { track: 'g3', cohort: '2028', date: '2026-11-09' }, props: { label: '고3 · 2028 수능', exam: '2027-11-18' } },
+  ];
+}
+import { loadDay, SUBJECTS, BEHAVIOR, rich, svg, choiceMark, dots, dday, weekday } from '../../../../lib/content.js';
+const { track, cohort, date: DATE } = Astro.params; const { label, exam } = Astro.props;
+const day = loadDay(track, DATE);
+const avail = SUBJECTS.filter(([k]) => day[k]);
+---
+<Base title={`${label} ${DATE} 오늘의 학습`}>
+  <p class="head-line">{label} | {DATE}({weekday(DATE)}) | {dday(DATE, exam)}(확정)</p>
+  <h1>오늘의 학습 — 6과목 개념과 문제</h1>
+  <div class="datenav"><span>◀ 전날</span><a href={`/${track}/${cohort}/`}>아카이브</a><span>다음날 ▶</span></div>
+  <nav class="tabs" aria-label="과목">{avail.map(([k, n]) => <a href={`#${k}`}>{n}</a>)}</nav>
+  {avail.map(([k, n], si) => {
+    const d = day[k]; const c = d.concept;
+    return (
+      <section class="subject" id={k}>
+        <h2>{n} — {c.title}</h2>
+        <div class="concept">
+          <p class="muted">{(c.standards || []).join(' ')} · 〔교과서〕 {String(c.textbook_ref || "").replace(/^〔교과서〕\s*/, "")}</p>
+          <dl>
+            <dt>정의</dt><dd set:html={rich(c.definition)} />
+            <dt>원리</dt><dd set:html={rich(c.principle)} />
+            <dt>예시</dt><dd><ul>{(c.examples || []).map((e) => <li set:html={rich(e)} />)}</ul></dd>
+            <dt>자주 틀리는 점</dt><dd><ul>{(c.pitfalls || []).map((e) => <li set:html={rich(e)} />)}</ul></dd>
+          </dl>
+        </div>
+        {d.passage && <div class="passage" set:html={rich(d.passage)} />}
+        {(d.problems || []).map((q, qi) => {
+          const prev = qi > 0 ? d.problems[qi - 1].passage : null;
+          return (
+            <article class="prob" id={`${k}-${q.num}`}>
+              <div class="meta"><b>문제 {q.num}</b><span>난이도 {dots(q.difficulty || 1)}</span><span class="badge">{BEHAVIOR[k]?.[q.behavior] ?? q.behavior}</span><span>{q.points}점</span><span>{q.standard}</span></div>
+              {q.passage && q.passage !== prev && <div class="passage" set:html={rich(q.passage)} />}
+              <div set:html={rich(q.stem)} />
+              {(q.figures || []).map((f) => <div class="fig" set:html={svg(f)} />)}
+              {q.choices && q.choices.length > 0 && <ul class="choices">{q.choices.map((ch, i) => <li><span class="mk">{choiceMark(i)}</span><span set:html={rich(ch).replace(/^<p>|<\/p>$/g, '')} /></li>)}</ul>}
+              <details class="ans"><summary>정답·해설 보기</summary><div class="body"><p><b>정답 {q.answer}</b></p><div set:html={rich(q.explanation)} /></div></details>
+              <p class="verify">✓ AI 생성 · 자동 검증 통과(정답을 모르는 별도 검증 일치)</p>
+            </article>
+          );
+        })}
+        {si === 2 && <div class="adslot">광고 자리(과목 사이 — 출시 전에는 비워 둠)</div>}
+      </section>
+    );
+  })}
+  <p class="muted">오류를 발견하면 <a href="/report/">오류 제보</a>로 알려 주세요(문제 번호가 자동으로 들어갑니다).</p>
+</Base>

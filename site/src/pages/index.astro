@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import { loadDay, SUBJECTS, EXAMS, dday } from '../lib/content.js';
+const TODAY = '2026-11-09';   // 시안 기준일(11/09 실험 2 1일분)
+const g1 = loadDay('g1', TODAY);
+const g3 = loadDay('g3', TODAY);   // 시안: 11/09 실험의 g3 세트를 고3 트랙 자리에 표시(초기 2트랙의 구성은 구축 단계에서 확정)
+// 최신 공지: 11/11 실험 3 확대 실측 결과에서 고른 메타데이터(제목·날짜·기관·원문 링크만, S1)
+const NOTICES = [
+  ['2026-10-26', '연세대학교', '일정', '2027학년도 수시모집 [국제인재, 기회균형, 체육인재] 2단계 면접대상자 발표', 'https://www2.yonsei.ac.kr/entrance/2027/susi/pass_1st_bdbhcc/pass.asp'],
+  ['2026-10-07', '연세대학교', '수시', '2027학년도 수시모집 논술전형 논술시험 고사장 안내', 'https://www2.yonsei.ac.kr/entrance/2027/susi/room_direction/room.asp'],
+  ['2026-09-17', '인천광역시교육청', '학력평가', '2026학년도 9월 고1,2 전국연합학력평가 성적 분석 및 통계 자료 활용 안내', 'https://www.ice.go.kr/ice/na/ntt/selectNttList.do?mi=10910&bbsId=1703'],
+  ['2026-09-01', '연세대학교', '일정', '2027학년도 수시모집 면접 일정 및 시간 안내', 'https://admission.yonsei.ac.kr/seoul/admission/html/rolling/notice.asp'],
+  ['2026-07-20', '인천광역시교육청', '학력평가', '2026학년도 7월 고3 전국연합학력평가 성적 분석 및 통계 자료 활용 안내', 'https://www.ice.go.kr/ice/na/ntt/selectNttList.do?mi=10910&bbsId=1703'],
+];
+const SCHEDULE = [['2027-11-18', '2028학년도 수능', '확정'], ['2028-11-16', '2029학년도 수능', '확정']];
+const rot = SUBJECTS[new Date(TODAY).getDay() % 6];
+---
+<Base title="홈">
+  <div class="band">{EXAMS.map((e) => <span class="chip">{e.year} 수능 <b>{dday(TODAY, e.date)}</b>({e.status})</span>)}</div>
+  <p class="muted">기준일 {TODAY} · 날마다 트랙별 6과목 핵심 개념과 연습문제를 새로 씁니다.</p>
+  <h2>트랙</h2>
+  <div class="cards">
+    <section class="card">
+      <h3>고1 · 2029 수능</h3>
+      <p class="muted">공통과목 기본 — 오늘 6과목</p>
+      <ul>{SUBJECTS.map(([k, n]) => <li>{n}: {g1[k]?.concept?.title ?? '준비 중'}</li>)}</ul>
+      <a class="btn" href={`/g1/2029/${TODAY}/`}>오늘의 학습 →</a>
+    </section>
+    <section class="card">
+      <h3>고3 · 2028 수능</h3>
+      <p class="muted">수능 범위 실전 — 오늘 6과목</p>
+      <ul>{SUBJECTS.map(([k, n]) => <li>{n}: {g3[k]?.concept?.title ?? '준비 중'}</li>)}</ul>
+      <a class="btn" href={`/g3/2028/${TODAY}/`}>오늘의 학습 →</a>
+    </section>
+  </div>
+  <h2>오늘의 개념 한 줄</h2>
+  <p><span class="tag">고1 · {rot[1]}</span>{g1[rot[0]]?.concept?.summary ?? ''}</p>
+  <h2>최신 공지</h2>
+  <ul class="list">{NOTICES.map(([d, org, c, t, u]) => <li><span class="tag">{c}</span><a href={u} rel="nofollow noopener" target="_blank">{t}</a><br><span class="muted">{d} · {org}</span></li>)}</ul>
+  <p class="muted">요약은 참고용입니다. 반드시 원문을 확인하세요. <a href="/notices/">전체 →</a></p>
+  <h2>다가오는 일정</h2>
+  <ul class="list">{SCHEDULE.map(([d, t, s]) => <li>{d} · {t} <span class="tag">{s}</span></li>)}</ul>
+  <h2>구독</h2>
+  <p>트랙별 RSS와 텔레그램 채널로 매일 아침 받아 보세요. <a href="/subscribe/">구독 안내 →</a></p>
+</Base>

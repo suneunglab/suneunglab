@@ -1,0 +1,33 @@
+---
+import 'katex/dist/katex.min.css';
+import '../styles/site.css';
+const { title, desc = '수능 개념·문제·입시 소식을 매일 정리하는 연구실' } = Astro.props;
+const MENU = [['/', '홈'], ['/g1/', '고1 · 2029 수능'], ['/concepts/', '개념 지도'], ['/exam/', '수능 제도'], ['/notices/', '입시·기관 공지'], ['/subscribe/', '구독'], ['/about/', '소개']];
+---
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title} | 수능랩</title>
+  <meta name="description" content={desc} />
+  <meta name="robots" content="noindex" />
+</head>
+<body>
+  <header class="top">
+    <div class="wrap bar">
+      <a class="logo" href="/"><span class="w1">수능</span><span class="w2">랩</span></a>
+      <nav class="menu-wide" aria-label="주 메뉴">{MENU.map(([h, t]) => <a href={h}>{t}</a>)}</nav>
+      <details class="menu-narrow"><summary aria-label="메뉴 열기">☰</summary><nav>{MENU.map(([h, t]) => <a href={h}>{t}</a>)}</nav></details>
+    </div>
+  </header>
+  <div class="preview">시안 v0.1 — 실험 산출물로 만든 미리보기입니다. 공개 전 화면이며 검색엔진 수집을 막아 두었습니다.</div>
+  <main class="wrap"><slot /></main>
+  <footer class="foot">
+    <div class="wrap">
+      <nav><a href="/privacy/">개인정보처리방침</a> · <a href="/license/">라이선스(CC BY-NC-ND 4.0)</a> · <a href="/how/">생성·검수 방식</a> · <a href="/corrections/">정정 로그</a> · <a href="/report/">오류 제보</a> · <a href="/about/bot">봇 안내</a> · <a href="/contact/">연락처</a></nav>
+      <p>수능랩 · suneunglab.com — 교과서·기출 원문은 싣지 않고 참조만 표기합니다.</p>
+    </div>
+  </footer>
+</body>
+</html>
