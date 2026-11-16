@@ -1,0 +1,24 @@
+# 수능랩 공개 저장소 — 비공개 자료는 절대 올리지 않는다(지침 5, 08 T7)
+04_비공개/
+**/비공개/
+**/교과서*/
+*OCR*
+*.pdf
+review/
+reserve/
+private/
+*.idx
+*.hash
+streak.json
+state.json
+# 빌드·의존성
+node_modules/
+dist/
+.astro/
+__pycache__/
+*.pyc
+.venv/
+# 비밀값
+.env
+.env.*
+*.key
