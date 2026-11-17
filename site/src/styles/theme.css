@@ -1,0 +1,115 @@
+/* 수능랩 테마 — 색·글자 토큰, 기본 글자, 공통 틀(머리·메뉴·알림 띠·바닥). 2026-11-17 B-05(계획서 53행 앞당김)
+   색: 워드마크 A안 남색 #1F3A5F + 주황 #F28C28(2026-10-29 확정). 다크 모드는 B안 색(흰색 + 민트 #5FD3B3)을 운영체제 설정에 따라 자동 적용.
+   글자 크기·카드·여백: 시안 v0.1(2026-11-12 Paul 승인). 글꼴: 웹 글꼴을 내려받지 않는 시스템 글꼴(근거 site/README.md '테마').
+   글자 대비: 본문·보조 글자 4.5:1 이상(라이트·다크 모두) — 확인 `node tools/contrast.cjs` */
+
+:root {
+  color-scheme: light dark;
+  /* 브랜드(워드마크) — 글자 대비 예외(로고) */
+  --brand-1: #1f3a5f;          /* '수능' */
+  --brand-2: #f28c28;          /* '랩' · 장식 강조(테두리·밑줄) */
+  /* 바탕·선 */
+  --bg: #ffffff; --card: #ffffff; --soft: #f5f7fa; --line: #dfe3ea;
+  /* 글자 */
+  --ink: #1d2430; --muted: #5b6575; --link: #1f3a5f;
+  --accent: #b45309;           /* 글자에 쓰는 주황(D-day 숫자 등) — 흰 바탕 5.0:1 */
+  --ok: #2f7d4f;
+  /* 단추·알림·초점 */
+  --btn-bg: #1f3a5f; --btn-fg: #ffffff;
+  --notice-bg: #fff4e5; --notice-fg: #7a4a12;
+  --focus: #1f3a5f;
+  --shadow: 0 6px 20px rgba(0, 0, 0, .12);
+  --fig-bg: transparent;
+  /* 글자 크기(시안 v0.1) */
+  --fs-xs: 12px; --fs-sm: 13px; --fs-md: 14px; --fs-body: 15px; --fs-base: 16px;
+  --fs-h3: 17px; --fs-h2: 19px; --fs-h1: 22px; --fs-logo: 22px;
+  /* 모양 */
+  --radius: 12px; --radius-sm: 8px; --wrap: 760px; --bar-h: 56px;
+  --font: "Pretendard", "Pretendard Variable", "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --brand-1: #ffffff;
+    --brand-2: #5fd3b3;
+    --bg: #0f141b; --card: #141b24; --soft: #18202b; --line: #2c3442;
+    --ink: #e7ebf1; --muted: #a3adbb; --link: #9cc0ea;
+    --accent: #5fd3b3;
+    --ok: #6cc495;
+    --btn-bg: #9cc0ea; --btn-fg: #0f141b;
+    --notice-bg: #3a2a14; --notice-fg: #f3d3a6;
+    --focus: #5fd3b3;
+    --shadow: 0 6px 20px rgba(0, 0, 0, .5);
+    --fig-bg: #ffffff;         /* 자체 SVG 그림은 진한 선이 많아 흰 바탕 위에 둔다 */
+  }
+}
+
+/* 기본 */
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: var(--fs-base)/1.7 var(--font); word-break: keep-all; overflow-wrap: anywhere; }
+a { color: var(--link); }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+h1 { font-size: var(--fs-h1); line-height: 1.4; margin: 8px 0 4px; }
+h2 { font-size: var(--fs-h2); line-height: 1.45; margin: 28px 0 10px; }
+h3 { font-size: var(--fs-h3); line-height: 1.5; margin: 18px 0 8px; }
+.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 16px; }
+.muted { color: var(--muted); font-size: var(--fs-md); }
+
+/* 본문 바로가기 */
+.skip { position: absolute; left: 8px; top: -60px; z-index: 30; background: var(--btn-bg); color: var(--btn-fg); padding: 8px 12px; border-radius: var(--radius-sm); text-decoration: none; }
+.skip:focus { top: 8px; }
+main { padding-top: 16px; padding-bottom: 40px; }
+main:focus { outline: none; }
+
+/* 머리 */
+.top { position: sticky; top: 0; z-index: 10; background: var(--bg); border-bottom: 1px solid var(--line); }
+.bar { display: flex; align-items: center; gap: 12px; height: var(--bar-h); }
+.logo { font-weight: 800; font-size: var(--fs-logo); letter-spacing: -0.5px; text-decoration: none; white-space: nowrap; }
+.logo .w1 { color: var(--brand-1); }
+.logo .w2 { color: var(--brand-2); }
+
+/* 넓은 화면 메뉴 */
+.menu-wide { display: none; align-items: center; gap: 14px; margin-left: auto; font-size: var(--fs-md); }
+.menu-wide > a, .dd > summary { color: var(--ink); text-decoration: none; white-space: nowrap; padding: 6px 0; border-bottom: 2px solid transparent; }
+.menu-wide > a:hover, .dd > summary:hover { color: var(--link); }
+.menu-wide > a.on, .dd.on > summary { border-bottom-color: var(--brand-2); font-weight: 700; }
+.dd { position: relative; }
+.dd > summary, .menu-narrow > summary { list-style: none; cursor: pointer; }
+.dd > summary::-webkit-details-marker, .menu-narrow > summary::-webkit-details-marker { display: none; }
+.dd > summary::after { content: ""; display: inline-block; width: 6px; height: 6px; margin-left: 6px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-3px) rotate(45deg); }
+.dd[open] > summary::after { transform: translateY(1px) rotate(225deg); }
+.dd-panel, .menu-narrow nav { position: absolute; z-index: 11; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 6px 0; box-shadow: var(--shadow); }
+.dd-panel { left: -12px; top: calc(100% + 10px); min-width: 176px; }
+.dd-panel a, .menu-narrow nav a { display: block; padding: 8px 16px; color: var(--ink); text-decoration: none; white-space: nowrap; }
+.dd-panel a:hover, .menu-narrow nav a:hover { background: var(--soft); }
+.dd-panel a[aria-current="page"], .menu-narrow nav a[aria-current="page"], .menu-narrow nav a.on { color: var(--link); font-weight: 700; }
+
+/* 검색·햄버거 */
+.tools { display: flex; align-items: center; gap: 2px; margin-left: auto; }
+.icon, .menu-narrow > summary { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: var(--radius-sm); color: var(--ink); }
+.icon:hover, .menu-narrow > summary:hover { background: var(--soft); }
+.icon svg, .menu-narrow > summary svg { width: 22px; height: 22px; }
+.menu-narrow nav { right: 16px; top: calc(var(--bar-h) - 4px); min-width: 220px; max-height: calc(100vh - 80px); overflow-y: auto; }
+.menu-narrow nav .grp { display: block; padding: 8px 16px 2px; font-size: var(--fs-sm); color: var(--muted); }
+.menu-narrow nav a.sub { padding-left: 28px; font-size: var(--fs-body); }
+@media (min-width: 900px) {
+  .menu-wide { display: flex; }
+  .menu-narrow { display: none; }
+  .tools { margin-left: 8px; }
+}
+
+/* 알림 띠(공개 전) */
+.notice { background: var(--notice-bg); color: var(--notice-fg); font-size: var(--fs-sm); padding: 6px 16px; text-align: center; }
+
+/* 바닥 */
+.foot { border-top: 1px solid var(--line); color: var(--muted); font-size: var(--fs-sm); padding: 18px 0 30px; margin-top: 24px; }
+.foot nav { line-height: 2; }
+.foot a { color: var(--muted); }
+.foot p { margin: 6px 0 0; }
+
+/* 인쇄: 메뉴·띠·광고 자리 숨김 */
+@media print {
+  .top, .notice, .foot nav, .tabs, .adslot, .skip { display: none !important; }
+  body { background: #fff; color: #000; }
+}

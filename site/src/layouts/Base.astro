@@ -1,33 +1,94 @@
 ---
+// 공통 틀 — 머리(워드마크·상단 메뉴 7·검색)·알림 띠·본문·바닥(03 화면설계 0절, 02 사이트맵 1절).
+// 2026-11-17 B-05(계획서 53행 앞당김): 메뉴·바닥글 주소를 02 사이트맵 주소로 맞춤, 트랙 펼침 메뉴(그날 코호트), 모바일 햄버거,
+// 본문 바로가기, 다크 모드(운영체제 설정 — 저장 없음), 파비콘. 자바스크립트 없이도 모든 메뉴가 동작한다(바깥 클릭 닫기만 보조 스크립트).
 import 'katex/dist/katex.min.css';
+import '../styles/theme.css';
 import '../styles/site.css';
-const { title, desc = '수능 개념·문제·입시 소식을 매일 정리하는 연구실' } = Astro.props;
-const MENU = [['/', '홈'], ['/g1/', '고1 · 2029 수능'], ['/concepts/', '개념 지도'], ['/exam/', '수능 제도'], ['/notices/', '입시·기관 공지'], ['/subscribe/', '구독'], ['/about/', '소개']];
+import { SITE, MENU, FOOTER } from '../lib/site.js';
+import { tracksOn, kstToday } from '../lib/tracks.js';
+
+const { title, desc = SITE.tagline } = Astro.props;
+const path = Astro.url.pathname;
+const tracks = tracksOn(kstToday());
+const section = path === '/' ? 'home'
+  : /^\/g[123]\//.test(path) ? 'track'
+  : (MENU.find((m) => m.href && m.href !== '/' && path.startsWith(m.href))?.id ?? '');
+const pageTitle = title ? `${title} | ${SITE.name}` : `${SITE.name} — ${SITE.tagline}`;
+const canonical = new URL(path, SITE.url).href;
+const cur = (href) => (path === href ? 'page' : undefined);
 ---
 <!doctype html>
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{title} | 수능랩</title>
+  <title>{pageTitle}</title>
   <meta name="description" content={desc} />
-  <meta name="robots" content="noindex" />
+  {!SITE.index && <meta name="robots" content="noindex" />}
+  <link rel="canonical" href={canonical} />
+  <meta name="color-scheme" content="light dark" />
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0f141b" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="/favicon.ico" sizes="32x32" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 </head>
 <body>
+  <a class="skip" href="#main">본문 바로가기</a>
   <header class="top">
     <div class="wrap bar">
-      <a class="logo" href="/"><span class="w1">수능</span><span class="w2">랩</span></a>
-      <nav class="menu-wide" aria-label="주 메뉴">{MENU.map(([h, t]) => <a href={h}>{t}</a>)}</nav>
-      <details class="menu-narrow"><summary aria-label="메뉴 열기">☰</summary><nav>{MENU.map(([h, t]) => <a href={h}>{t}</a>)}</nav></details>
+      <a class="logo" href="/" aria-label={`${SITE.name} 홈`}><span class="w1">수능</span><span class="w2">랩</span></a>
+      <nav class="menu-wide" aria-label="주 메뉴">
+        {MENU.map((m) => m.id === 'track'
+          ? (
+            <details class:list={['dd', { on: section === 'track' }]}>
+              <summary>트랙</summary>
+              <div class="dd-panel">{tracks.map((t) => <a href={t.href} aria-current={cur(t.href)}>{t.label}</a>)}</div>
+            </details>
+          )
+          : <a href={m.href} class:list={[{ on: section === m.id }]} aria-current={cur(m.href)}>{m.label}</a>)}
+      </nav>
+      <div class="tools">
+        <a class="icon" href="/search/" aria-label="검색">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M20 20l-4.2-4.2" /></svg>
+        </a>
+        <details class="menu-narrow">
+          <summary aria-label="메뉴 열기">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+          </summary>
+          <nav aria-label="주 메뉴(좁은 화면)">
+            {MENU.map((m) => m.id === 'track'
+              ? (
+                <>
+                  <span class="grp">트랙</span>
+                  {tracks.map((t) => <a class:list={['sub', { on: path.startsWith(t.href) }]} href={t.href} aria-current={cur(t.href)}>{t.label}</a>)}
+                </>
+              )
+              : <a href={m.href} class:list={[{ on: section === m.id }]} aria-current={cur(m.href)}>{m.label}</a>)}
+          </nav>
+        </details>
+      </div>
     </div>
   </header>
-  <div class="preview">시안 v0.1 — 실험 산출물로 만든 미리보기입니다. 공개 전 화면이며 검색엔진 수집을 막아 두었습니다.</div>
-  <main class="wrap"><slot /></main>
+  {SITE.notice && <div class="notice" role="note">{SITE.notice}</div>}
+  <main id="main" class="wrap" tabindex="-1"><slot /></main>
   <footer class="foot">
     <div class="wrap">
-      <nav><a href="/privacy/">개인정보처리방침</a> · <a href="/license/">라이선스(CC BY-NC-ND 4.0)</a> · <a href="/how/">생성·검수 방식</a> · <a href="/corrections/">정정 로그</a> · <a href="/report/">오류 제보</a> · <a href="/about/bot">봇 안내</a> · <a href="/contact/">연락처</a></nav>
-      <p>수능랩 · suneunglab.com — 교과서·기출 원문은 싣지 않고 참조만 표기합니다.</p>
+      <nav aria-label="사이트 정보">{FOOTER.map(([href, text], i) => <>{i > 0 && ' · '}<a href={href}>{text}</a></>)}</nav>
+      <p>{SITE.name} · suneunglab.com — {SITE.tagline}</p>
+      <p>학습 콘텐츠는 AI가 만들고 자동 검증합니다. 교과서·기출 원문은 싣지 않고 참조만 표기하며, 공지 원문의 저작권은 각 기관에 있습니다.</p>
     </div>
   </footer>
+  <script is:inline>
+    // 펼친 메뉴: 바깥을 누르거나 Esc를 누르면 닫는다(없어도 메뉴는 동작).
+    document.addEventListener('click', (e) => {
+      document.querySelectorAll('details.dd[open], details.menu-narrow[open]').forEach((d) => { if (!d.contains(e.target)) d.removeAttribute('open'); });
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      document.querySelectorAll('details.dd[open], details.menu-narrow[open]').forEach((d) => { d.removeAttribute('open'); d.querySelector('summary').focus(); });
+    });
+  </script>
 </body>
 </html>

@@ -8,11 +8,16 @@
 | 경로 | 내용 |
 |---|---|
 | `src/pages/` | 페이지(파일 경로 = 주소) |
-| `src/layouts/Base.astro` | 공통 머리·꼬리·메뉴 |
+| `src/layouts/Base.astro` | 공통 틀 — 머리(워드마크·메뉴 7·검색)·알림 띠·바닥글 |
+| `src/lib/site.js` | 사이트 이름·태그라인·검색 수집 여부(`index`)·메뉴·바닥글 주소 |
+| `src/lib/tracks.js` | 트랙 메뉴 — 그날 재학 중인 코호트(고1 · 2029 수능 …) |
 | `src/lib/content.js` | 콘텐츠 YAML 읽기, 수식·표 변환, D-day 계산 |
-| `src/styles/site.css` | 화면 스타일(라이트·다크) |
-| `public/` | 그대로 복사되는 정적 파일 |
-| `tools/shot.cjs` | 점검용 화면 캡처(Playwright — 360px·1280px·다크, 가로 넘침·KaTeX 오류) |
+| `src/styles/theme.css` | 색·글자 토큰(라이트·다크), 기본 글자, 머리·메뉴·바닥 |
+| `src/styles/site.css` | 화면 부품(카드·학습 페이지·표·그림) — 색은 토큰만 씀 |
+| `public/` | 그대로 복사되는 정적 파일(파비콘 3종) |
+| `tools/shot.cjs` | 점검용 화면 캡처(Playwright — 360·1280px × 라이트·다크, 메뉴 펼침, 가로 넘침·KaTeX 오류) |
+| `tools/contrast.cjs` | 글자 대비 점검(WCAG 4.5:1) |
+| `tools/make_favicon.py` | 파비콘 만들기(워드마크 축약형) |
 
 ## 빌드
 ```
@@ -22,3 +27,14 @@ npx astro build            # 콘텐츠 없이 빌드(준비 중 표시)
 DATA_DIR=<YAML 폴더> npx astro build   # 콘텐츠 넣어 빌드
 ```
 결과는 `site/dist/`(저장소에 올리지 않음).
+
+## 테마·공통 틀(B-05, 2026-11-17 — 계획서 53행 앞당김)
+- **색**: 워드마크 A안 남색 `#1F3A5F` + 주황 `#F28C28`(2026-10-29 확정). 다크 모드는 B안 색(흰색 + 민트 `#5FD3B3`)을 운영체제 설정에 따라 자동 적용. 시안 v0.1의 주황 `#e8742a`·다크 하늘색/연주황은 확정 색으로 바로잡음. 글자에 쓰는 주황은 대비 때문에 `#b45309`(흰 바탕 5.0:1).
+- **대비**: 본문·보조·링크·단추 글자 모두 4.5:1 이상(라이트·다크) — `node tools/contrast.cjs`. 워드마크는 로고라 대비 기준 예외.
+- **글꼴**: 웹 글꼴을 내려받지 않는다(시스템 글꼴: Pretendard 설치 기기 → Pretendard, 그 밖 Noto Sans KR·Apple SD Gothic Neo·맑은 고딕). 근거 — Pretendard 1.3.9(SIL OFL 1.1, 내장은 허용)의 가변 동적 부분집합을 측정하니 첫 방문 글꼴만 홈 약 0.36MB(14파일)·오늘의 학습 약 0.69~0.73MB(26~28파일). 모바일 우선(360px)·데이터 부담 대비 이득이 작아 내장하지 않음. 바꾸려면 woff2 동적 부분집합을 `public/fonts/`에 두고 OFL 전문을 함께 넣는다.
+- **메뉴**: 상단 7개(02 사이트맵 1절) + 검색. 트랙은 펼침 메뉴로 그날 코호트를 보여 준다(`tracks.js` — B-09·B-11에서 데이터 기준으로 교체). 좁은 화면(900px 미만)은 햄버거. 자바스크립트 없이 동작(`details`), 바깥 클릭·Esc 닫기만 보조 스크립트.
+- **주소 정정**: 시안의 `/exam/`·`/how/`·`/license/`·`/corrections/`·`/report/`·`/about/bot` → 02 사이트맵 주소 `/system/`·`/about/how-it-works/`·`/about/license/`·`/about/corrections/`·`/about/report/`·`/about/bot/`.
+- **접근성**: 본문 바로가기(Tab 첫 칸), 초점 테두리, 현재 페이지 `aria-current`. 다크 모드 전환 단추는 두지 않음(설정 저장 없이 운영체제 설정을 따름 — 09 개인정보처리방침의 '쿠키 없음'과 맞춤).
+- **그림**: 다크 모드에서 자체 SVG 그림은 흰 바탕 위에 표시(진한 선이 보이도록).
+- **파비콘**: 워드마크 축약형(남색 원 + 주황 '랩', Pretendard ExtraBold 윤곽선) — `public/favicon.svg`·`favicon.ico`(16·32·48)·`apple-touch-icon.png`(180).
+- **점검(2026-11-17)**: 3페이지 × 360·1280px × 라이트·다크 = 12화면 가로 넘침 0, KaTeX 300식 오류 0, 메뉴 7·바닥글 7·트랙 2(고1 · 2029, 고2 · 2028).
