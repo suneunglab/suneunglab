@@ -1,45 +1,68 @@
 ---
+// 홈 `/`(M1) — 03 화면설계 1절 ①~⑥. 2026-11-18 B-06: 기준일 = 빌드한 날(KST), 트랙 카드 = 그날 코호트(tracks.js).
+// 생성 콘텐츠(DATA_DIR)가 없으면 예시 제목(demo.js)을 '예시'로 표시한다 — 실데이터 연결은 B-13.
 import Base from '../layouts/Base.astro';
 import { loadDay, SUBJECTS, EXAMS, dday } from '../lib/content.js';
-const TODAY = '2026-11-09';   // 시안 기준일(11/09 실험 2 1일분)
-const g1 = loadDay('g1', TODAY);
-const g3 = loadDay('g3', TODAY);   // 시안: 11/09 실험의 g3 세트를 고3 트랙 자리에 표시(초기 2트랙의 구성은 구축 단계에서 확정)
-// 최신 공지: 11/11 실험 3 확대 실측 결과에서 고른 메타데이터(제목·날짜·기관·원문 링크만, S1)
-const NOTICES = [
-  ['2026-10-26', '연세대학교', '일정', '2027학년도 수시모집 [국제인재, 기회균형, 체육인재] 2단계 면접대상자 발표', 'https://www2.yonsei.ac.kr/entrance/2027/susi/pass_1st_bdbhcc/pass.asp'],
-  ['2026-10-07', '연세대학교', '수시', '2027학년도 수시모집 논술전형 논술시험 고사장 안내', 'https://www2.yonsei.ac.kr/entrance/2027/susi/room_direction/room.asp'],
-  ['2026-09-17', '인천광역시교육청', '학력평가', '2026학년도 9월 고1,2 전국연합학력평가 성적 분석 및 통계 자료 활용 안내', 'https://www.ice.go.kr/ice/na/ntt/selectNttList.do?mi=10910&bbsId=1703'],
-  ['2026-09-01', '연세대학교', '일정', '2027학년도 수시모집 면접 일정 및 시간 안내', 'https://admission.yonsei.ac.kr/seoul/admission/html/rolling/notice.asp'],
-  ['2026-07-20', '인천광역시교육청', '학력평가', '2026학년도 7월 고3 전국연합학력평가 성적 분석 및 통계 자료 활용 안내', 'https://www.ice.go.kr/ice/na/ntt/selectNttList.do?mi=10910&bbsId=1703'],
-];
-const SCHEDULE = [['2027-11-18', '2028학년도 수능', '확정'], ['2028-11-16', '2029학년도 수능', '확정']];
-const rot = SUBJECTS[new Date(TODAY).getDay() % 6];
+import { kstToday, slotsOn, TRACK_INFO } from '../lib/tracks.js';
+import { DEMO_TITLES, DEMO_NOTICES, upcoming } from '../lib/demo.js';
+
+const TODAY = kstToday();
+const slots = slotsOn(TODAY);
+const cards = slots.map((s) => {
+  const day = s.active ? loadDay(`g${s.grade}`, TODAY) : {};
+  const real = Object.keys(day).length > 0;
+  const titles = SUBJECTS.map(([k, n]) => [n, real ? (day[k]?.concept?.title ?? '준비 중') : DEMO_TITLES[s.grade][k]]);
+  return { ...s, day, real, titles };
+});
+const active = cards.filter((c) => c.active);
+const demo = active.some((c) => !c.real);
+// ① D-day 띠: 제공 코호트의 수능만, 시험 다음 날부터 빠진다(R11, 결정 9)
+const cohorts = new Set(active.map((c) => c.cohort));
+const band = EXAMS.filter((e) => cohorts.has(e.year) && e.date >= TODAY);
+// ③ 오늘의 개념 한 줄: 트랙마다 요일별로 과목을 돌린다(P3-3)
+const wd = new Date(`${TODAY}T00:00:00+09:00`).getUTCDay();
+const lines = active.map((c, i) => {
+  const [k, n] = SUBJECTS[(wd + i) % SUBJECTS.length];
+  const text = c.real ? (c.day[k]?.concept?.summary ?? '') : `${DEMO_TITLES[c.grade][k]}(예시 — 실제 한 줄 요약은 생성 콘텐츠 연결 뒤 표시)`;
+  return { tag: `고${c.grade} · ${n}`, text };
+});
+const schedule = upcoming(TODAY, 3);
 ---
 <Base title="홈">
-  <div class="band">{EXAMS.map((e) => <span class="chip">{e.year} 수능 <b>{dday(TODAY, e.date)}</b>({e.status})</span>)}</div>
+  <div class="band">{band.map((e) => <span class="chip">{e.year} 수능 <b>{dday(TODAY, e.date)}</b>({e.status})</span>)}</div>
   <p class="muted">기준일 {TODAY} · 날마다 트랙별 6과목 핵심 개념과 연습문제를 새로 씁니다.</p>
+  {demo && <p class="demo" role="note">지금 보이는 과목 제목은 화면 확인용 예시입니다. 공개 전에 실제 학습 콘텐츠로 바뀝니다.</p>}
+
   <h2>트랙</h2>
   <div class="cards">
-    <section class="card">
-      <h3>고1 · 2029 수능</h3>
-      <p class="muted">공통과목 기본 — 오늘 6과목</p>
-      <ul>{SUBJECTS.map(([k, n]) => <li>{n}: {g1[k]?.concept?.title ?? '준비 중'}</li>)}</ul>
-      <a class="btn" href={`/g1/2029/${TODAY}/`}>오늘의 학습 →</a>
-    </section>
-    <section class="card">
-      <h3>고3 · 2028 수능</h3>
-      <p class="muted">수능 범위 실전 — 오늘 6과목</p>
-      <ul>{SUBJECTS.map(([k, n]) => <li>{n}: {g3[k]?.concept?.title ?? '준비 중'}</li>)}</ul>
-      <a class="btn" href={`/g3/2028/${TODAY}/`}>오늘의 학습 →</a>
-    </section>
+    {cards.map((c) => c.active
+      ? (
+        <section class="card">
+          <h3>{c.label}</h3>
+          <p class="muted">{TRACK_INFO[c.grade].level} — 오늘 6과목</p>
+          <ul>{c.titles.map(([n, t]) => <li>{n}: {t}</li>)}</ul>
+          <a class="btn" href={`/g${c.grade}/${c.cohort}/${TODAY}/`}>오늘의 학습 →</a>
+          <a class="more" href={c.href}>트랙 안내</a>
+        </section>
+      )
+      : (
+        <section class="card off">
+          <h3>{c.label}</h3>
+          <p class="muted">{c.start} 시작 — {c.cohort} 수능 코호트가 고{c.grade}이 되는 날부터 매일 게시합니다.</p>
+        </section>
+      ))}
   </div>
+
   <h2>오늘의 개념 한 줄</h2>
-  <p><span class="tag">고1 · {rot[1]}</span>{g1[rot[0]]?.concept?.summary ?? ''}</p>
+  {lines.map((l) => <p><span class="tag">{l.tag}</span>{l.text}</p>)}
+
   <h2>최신 공지</h2>
-  <ul class="list">{NOTICES.map(([d, org, c, t, u]) => <li><span class="tag">{c}</span><a href={u} rel="nofollow noopener" target="_blank">{t}</a><br><span class="muted">{d} · {org}</span></li>)}</ul>
+  <ul class="list">{DEMO_NOTICES.map(([d, org, c, t, u]) => <li><span class="tag">{c}</span><a href={u} rel="nofollow noopener" target="_blank">{t}</a><br><span class="muted">{d} · {org}</span></li>)}</ul>
   <p class="muted">요약은 참고용입니다. 반드시 원문을 확인하세요. <a href="/notices/">전체 →</a></p>
+
   <h2>다가오는 일정</h2>
-  <ul class="list">{SCHEDULE.map(([d, t, s]) => <li>{d} · {t} <span class="tag">{s}</span></li>)}</ul>
+  <ul class="list">{schedule.map((e) => <li>{e.date} · {e.title} <span class="tag">{e.status}</span></li>)}</ul>
+
   <h2>구독</h2>
   <p>트랙별 RSS와 텔레그램 채널로 매일 아침 받아 보세요. <a href="/subscribe/">구독 안내 →</a></p>
 </Base>

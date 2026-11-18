@@ -1,13 +1,16 @@
 // 화면 점검 캡처 — Playwright(Chromium). 360px·1280px × 라이트·다크, 메뉴 펼침, 가로 넘침·KaTeX 오류 측정.
 // 사용: (site 폴더) npx astro build → dist를 http://localhost:4321 로 띄운 뒤 node tools/shot.cjs → tools/shots/*.png (저장소 제외)
-// 2026-11-11 시안 v0.1 작성, 2026-11-17 B-05에서 다크·메뉴·1280 확대
+// 2026-11-11 시안 v0.1 작성, 2026-11-17 B-05에서 다크·메뉴·1280 확대, 2026-11-18 B-06에서 트랙(T1)·코호트(T2)·오늘 페이지 추가
 const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
 const OUT = path.join(__dirname, 'shots');
 fs.mkdirSync(OUT, { recursive: true });
 const BASE = process.env.BASE || 'http://localhost:4321';
-const PAGES = [['home', '/'], ['g1', '/g1/2029/2026-11-09/'], ['g3', '/g3/2028/2026-11-09/']];
+const TODAY = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);   // KST
+const PAGES = [['home', '/'], ['g1', '/g1/2029/2026-11-09/'], ['g3', '/g3/2028/2026-11-09/'],
+  ['t1_g1', '/g1/'], ['t1_g3', '/g3/'], ['t2_g2', '/g2/2028/'], ['today_g1', `/g1/2029/${TODAY}/`]];
+const SHOT = new Set(['home', 't1_g1', 't1_g3', 't2_g2', 'today_g1']);   // 전체 화면을 남길 페이지
 
 (async () => {
   const b = await chromium.launch();
@@ -27,7 +30,7 @@ const PAGES = [['home', '/'], ['g1', '/g1/2029/2026-11-09/'], ['g3', '/g3/2028/2
           tracks: [...document.querySelectorAll('.dd-panel a')].map((a) => a.textContent),
           footerLinks: document.querySelectorAll('.foot nav a').length,
         }));
-        if (name === 'home') await p.screenshot({ path: path.join(OUT, `${key}.png`) });
+        if (SHOT.has(name)) await p.screenshot({ path: path.join(OUT, `${key}.png`), fullPage: name === 'home' });
         if (name === 'home' && w === 360) {
           await p.click('.menu-narrow > summary');
           await p.screenshot({ path: path.join(OUT, `${key}_menu.png`) });

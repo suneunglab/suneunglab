@@ -1,0 +1,45 @@
+---
+// 트랙 첫 화면 `/g1/`·`/g2/`·`/g3/`(T1) — 03 화면설계 2절. 그날 그 슬롯의 코호트로 안내만 한다(04 5절: 저장하지 않고 계산).
+// 2026-11-18 B-06. 제공하지 않는 슬롯(예: 2026-11의 고3)은 시작일 안내만 보인다.
+import Base from '../../layouts/Base.astro';
+import { kstToday, slotsOn, TRACK_INFO, examFor } from '../../lib/tracks.js';
+import { dday } from '../../lib/content.js';
+
+export function getStaticPaths() {
+  return ['g1', 'g2', 'g3'].map((track) => ({ params: { track } }));
+}
+const { track } = Astro.params;
+const TODAY = kstToday();
+const s = slotsOn(TODAY)[Number(track.slice(1)) - 1];
+const info = TRACK_INFO[s.grade];
+const exam = s.active ? examFor(s.cohort) : null;
+const base = `/${track}/${s.cohort}`;
+---
+<Base title={s.active ? s.label : `고${s.grade} 트랙`}>
+  {s.active
+    ? (
+      <>
+        <h1>{s.label}</h1>
+        <p class="muted">범위: {info.scope}<br>난이도: {info.level} · 과목당 {info.count}문항</p>
+        <p class="head-line">{exam ? <>{exam.date} 수능 · {dday(TODAY, exam.date)}({exam.status})</> : '수능 시험일 미확정'}</p>
+        <p><a class="btn big" href={`${base}/${TODAY}/`}>오늘의 학습({TODAY}) →</a></p>
+        <h2>바로가기</h2>
+        <ul class="shortcuts">
+          <li><a href={`${base}/`}>{s.cohort} 수능 코호트 첫 화면</a></li>
+          <li><a href={`${base}/archive/`}>아카이브</a></li>
+          <li><a href={`${base}/calendar/`}>시험 캘린더</a></li>
+          <li><a href="/concepts/">개념 지도</a></li>
+        </ul>
+        <h2>구독</h2>
+        <p>이 트랙 <a href={`/${track}/feed.xml`}>RSS</a> · 텔레그램 채널(<a href="/subscribe/">구독 안내</a>)</p>
+      </>
+    )
+    : (
+      <>
+        <h1>고{s.grade} 트랙</h1>
+        <p>{s.start}에 시작합니다. 그날부터 {s.cohort} 수능 코호트(고{s.grade})의 학습을 매일 게시합니다.</p>
+        <p class="muted">범위: {info.scope}<br>난이도: {info.level} · 과목당 {info.count}문항</p>
+        <p><a href="/">홈에서 지금 열린 트랙 보기 →</a></p>
+      </>
+    )}
+</Base>

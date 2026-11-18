@@ -1,0 +1,51 @@
+---
+// 코호트 첫 화면 `/g3/2028/`(T2) — 03 화면설계 2절: 머리글 + 이 코호트의 시험일·D-day, 오늘의 학습, 최근 7일, 바로가기, 구독.
+// 2026-11-18 B-06. 최근 7일은 생성 콘텐츠가 쌓이면 날짜마다 6과목 제목을 보인다(B-13). 지금은 오늘만 페이지가 있다.
+import Base from '../../../layouts/Base.astro';
+import { kstToday, tracksOn, TRACK_INFO, examFor, addDays } from '../../../lib/tracks.js';
+import { loadDay, SUBJECTS, dday, weekday } from '../../../lib/content.js';
+import { DEMO_TITLES } from '../../../lib/demo.js';
+
+export function getStaticPaths() {
+  return tracksOn(kstToday()).map((t) => ({ params: { track: `g${t.grade}`, cohort: String(t.cohort) }, props: { t } }));
+}
+const { track, cohort } = Astro.params;
+const { t } = Astro.props;
+const TODAY = kstToday();
+const info = TRACK_INFO[t.grade];
+const exam = examFor(t.cohort);
+const day = loadDay(track, TODAY);
+const real = Object.keys(day).length > 0;
+const recent = Array.from({ length: 7 }, (_, i) => addDays(TODAY, -i)).map((d) => ({
+  date: d,
+  today: d === TODAY,
+  titles: d === TODAY ? SUBJECTS.map(([k]) => (real ? (day[k]?.concept?.title ?? '준비 중') : DEMO_TITLES[t.grade][k])) : null,
+}));
+const base = `/${track}/${cohort}`;
+---
+<Base title={`${t.label} 코호트`}>
+  <h1>{t.label}</h1>
+  <p class="muted">범위: {info.scope}<br>난이도: {info.level} · 과목당 {info.count}문항</p>
+  <p class="head-line">{exam ? <>{cohort}학년도 수능 {exam.date}({weekday(exam.date)}) · {dday(TODAY, exam.date)}({exam.status})</> : `${cohort}학년도 수능 시험일 미확정`}</p>
+  <p><a class="btn big" href={`${base}/${TODAY}/`}>오늘의 학습({TODAY}) →</a></p>
+
+  <h2>최근 7일</h2>
+  {!real && <p class="demo" role="note">오늘 제목은 화면 확인용 예시입니다. 지난 날짜는 매일 게시를 시작한 뒤부터 채워집니다.</p>}
+  <ul class="list recent">
+    {recent.map((r) => (
+      <li>
+        {r.today ? <a href={`${base}/${r.date}/`}>{r.date}({weekday(r.date)})</a> : <span class="muted">{r.date}({weekday(r.date)})</span>}
+        {r.titles ? <span class="titles">{r.titles.join(' · ')}</span> : <span class="muted"> — 게시 전</span>}
+      </li>
+    ))}
+  </ul>
+
+  <h2>바로가기</h2>
+  <ul class="shortcuts">
+    <li><a href={`${base}/archive/`}>아카이브</a></li>
+    <li><a href={`${base}/calendar/`}>시험 캘린더</a></li>
+    <li><a href="/concepts/">개념 지도</a></li>
+  </ul>
+  <h2>구독</h2>
+  <p>이 트랙 <a href={`/${track}/feed.xml`}>RSS</a> · 텔레그램 채널(<a href="/subscribe/">구독 안내</a>)</p>
+</Base>
