@@ -1,0 +1,65 @@
+---
+// 입시·기관 공지 `/notices/`(N1) — 03 화면설계 6절 1~5. 2026-11-19 B-07(계획서 55행 앞당김).
+// 수집 결과 연결(B-15·B-20) 전이라 예시 공지(demo.js — 11/11 실험 3 실측 메타데이터)를 '예시'로 보인다.
+// 필터는 브라우저 안에서만 거른다(주소 쿼리 색인 안 함, U7). 자바스크립트가 없으면 전체 목록이 그대로 보인다.
+import Base from '../../layouts/Base.astro';
+import { DEMO_NOTICES } from '../../lib/demo.js';
+import { CATEGORIES } from '../../lib/system.js';
+
+const CODE = { '일정': 'schedule', '수시': 'early', '정시': 'regular', '학력평가': 'mock', '제도': 'policy', '결과': 'result' };
+const NAME = Object.fromEntries(CATEGORIES);
+const rows = DEMO_NOTICES.map(([date, org, c, title, url]) => {
+  const cat = CODE[c] ?? 'etc';
+  return { date, org, kind: /대학교|대학$/.test(org) ? 'univ' : 'org', cat, catName: NAME[cat], title, url };
+});
+const orgs = [...new Set(rows.filter((r) => r.kind === 'org').map((r) => r.org))];
+const univs = [...new Set(rows.filter((r) => r.kind === 'univ').map((r) => r.org))];
+---
+<Base title="입시·기관 공지" desc="교육부·대교협·교육청·대학 입학처 공지의 제목과 원문 링크를 매일 모은 목록">
+  <h1>입시·기관 공지</h1>
+  <p class="disclaimer" role="note">요약은 참고용입니다. 시험일·전형 일정 등은 반드시 원문(교육부·평가원·대교협·대학)을 확인하세요.</p>
+  <p class="demo" role="note">지금 목록은 화면 확인용 예시입니다(2026-11-11 시험 수집에서 고른 실제 공지 제목·링크). 매일 수집 결과는 공개 전에 연결됩니다.</p>
+
+  <form class="filters" aria-label="공지 거르기" onsubmit="return false">
+    <label>기관 <select data-f="org"><option value="">전체</option>{orgs.map((o) => <option>{o}</option>)}</select></label>
+    <label>대학 <select data-f="org"><option value="">전체</option>{univs.map((o) => <option>{o}</option>)}</select></label>
+    <label>분류 <select data-f="cat"><option value="">전체</option>{CATEGORIES.map(([k, n]) => <option value={k}>{n}</option>)}</select></label>
+    <label>기간 <select data-f="days"><option value="">전체</option><option value="30">최근 30일</option><option value="90">최근 90일</option></select></label>
+    <label class="q">검색 <input type="search" data-f="q" placeholder="제목에서 찾기" /></label>
+  </form>
+
+  <ul class="list notices" id="notices">
+    {rows.map((r) => (
+      <li data-org={r.org} data-cat={r.cat} data-date={r.date}>
+        <span class="muted">{r.date} · {r.org}</span> <span class="tag">{r.catName}</span><br>
+        <a href={r.url} rel="nofollow noopener" target="_blank">{r.title} ↗</a>
+      </li>
+    ))}
+  </ul>
+  <p class="muted" id="nf-empty" hidden>조건에 맞는 공지가 없습니다.</p>
+
+  <p class="status">수집 상태: 마지막 갱신 — (수집 연결 전) · 점검 필요 대상 0</p>
+  <p class="muted">이 목록은 각 기관 게시판의 제목·링크만 모은 것이며, 원문 저작권은 각 기관에 있습니다. 공지 본문은 다시 싣지 않습니다. 평가원·어디가 등 자동으로 모으지 않는 곳은 <a href="/system/links/">기관 바로가기</a>에서 확인하세요.</p>
+
+  <script is:inline>
+    // 브라우저 안 필터(U7). 선택값은 주소에 남기지 않는다.
+    (() => {
+      const f = document.querySelector('.filters');
+      const items = [...document.querySelectorAll('#notices li')];
+      const empty = document.getElementById('nf-empty');
+      const run = () => {
+        const v = (k) => [...f.querySelectorAll(`[data-f="${k}"]`)].map((e) => e.value.trim()).filter(Boolean);
+        const orgs = v('org'); const cat = v('cat')[0]; const days = Number(v('days')[0] || 0); const q = (v('q')[0] || '').toLowerCase();
+        const since = days ? new Date(Date.now() + 9 * 3600e3 - days * 86400e3).toISOString().slice(0, 10) : '';
+        let n = 0;
+        items.forEach((li) => {
+          const ok = (!orgs.length || orgs.includes(li.dataset.org)) && (!cat || li.dataset.cat === cat)
+            && (!since || li.dataset.date >= since) && (!q || li.textContent.toLowerCase().includes(q));
+          li.hidden = !ok; if (ok) n += 1;
+        });
+        empty.hidden = n > 0;
+      };
+      f.addEventListener('input', run);
+    })();
+  </script>
+</Base>

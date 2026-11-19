@@ -1,0 +1,22 @@
+---
+// 변경 이력 `/system/changes/`(S3) — 03 화면설계 5절. 최신순, 발표일·학년도·바뀐 항목·이전 → 새 값·원문. 2026-11-19 B-07.
+import Base from '../../../layouts/Base.astro';
+import { CHANGES, SRC } from '../../../lib/system.js';
+
+const rows = [...CHANGES].sort((a, b) => b.date.localeCompare(a.date));
+---
+<Base title="수능 제도 변경 이력" desc="수능 시험일·체제·일정이 바뀐 기록(발표일·이전 값·새 값·원문 링크)">
+  <p class="crumb"><a href="/system/">수능 제도</a> › 변경 이력</p>
+  <h1>변경 이력</h1>
+  <p class="disclaimer" role="note">요약은 참고용입니다. 시험일·전형 일정 등은 반드시 원문(교육부·평가원·대교협·대학)을 확인하세요.</p>
+  <ul class="list changes">
+    {rows.map((c) => (
+      <li>
+        <p class="when"><b>{c.date}</b> <span class="tag">{c.year}학년도</span>{c.item}</p>
+        <p><span class="muted">이전</span> {c.before}<br><span class="muted">변경</span> {c.after}</p>
+        <p class="muted">원문: <a href={SRC[c.src].url} rel="noopener" target="_blank">{SRC[c.src].org} — {SRC[c.src].title}</a></p>
+      </li>
+    ))}
+  </ul>
+  <p class="muted">시험일 확정처럼 사이트가 자동으로 바꾼 값도 여기에 한 줄씩 남깁니다.</p>
+</Base>

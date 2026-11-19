@@ -1,0 +1,23 @@
+---
+// 봇 안내 `/about/bot/`(A8, noindex) — 05 크롤러명세 C1~C4. User-Agent의 안내 주소가 이 페이지다. 2026-11-19 B-07.
+import Base from '../../../layouts/Base.astro';
+
+const UA = 'SuneungLabBot/0.1 (+https://suneunglab.com/about/bot)';
+---
+<Base title="봇 안내 — SuneungLabBot" desc="수능랩 공지 수집 로봇의 신원·수집 범위·요청 간격·중지 요청 방법" noindex>
+  <p class="crumb"><a href="/about/">소개</a> › 봇 안내</p>
+  <h1>봇 안내 — SuneungLabBot</h1>
+  <p>수능랩은 교육부·한국대학교육협의회·시도교육청·대학 입학처 게시판의 공지 <b>목록</b>을 하루 한 번 읽어, 제목과 원문 링크를 <a href="/notices/">입시·기관 공지</a>에 보여 줍니다.</p>
+  <div class="tw">
+    <table class="wide">
+      <tbody>
+        <tr><th>User-Agent</th><td class="l"><code>{UA}</code></td></tr>
+        <tr><th>가져가는 것</th><td class="l">목록의 제목·게시일·원문 주소·기관·게시판·분류만. 본문·첨부파일(hwp·pdf)은 내려받거나 다시 게시하지 않습니다.</td></tr>
+        <tr><th>robots.txt</th><td class="l">실행할 때마다 읽고, 우리 이름 규칙과 <code>*</code> 규칙 가운데 더 엄격한 쪽을 따릅니다. 막힌 곳은 수집하지 않고 링크만 안내합니다.</td></tr>
+        <tr><th>부하</th><td class="l">같은 서버에 5초 이상 간격, 실행당 목록 1~2쪽, 하루 1회(새벽), 동시 요청 없음.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <h2>수집 중지 요청</h2>
+  <p>robots.txt에 <code>User-agent: SuneungLabBot</code> · <code>Disallow: /</code>를 넣으시면 다음 실행부터 멈춥니다. 바로 멈추길 원하시면 <a href="mailto:contact@suneunglab.com?subject=[봇] 수집 중지 요청">contact@suneunglab.com</a>으로 기관명과 게시판 주소를 알려 주세요. 확인 뒤 수집 대상에서 뺍니다.</p>
+</Base>

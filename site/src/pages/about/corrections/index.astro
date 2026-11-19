@@ -1,0 +1,23 @@
+---
+// 정정 로그 `/about/corrections/`(A6) — 03 화면설계 8절(날짜·페이지·문제 ID·정정 내용), 01 원칙 P2-6. 2026-11-19 B-07.
+// 게시 시작(2027-01-25 소프트 오픈) 전이라 기록이 없다. 정정이 생기면 B-23 게시 큐가 이 목록에 한 줄씩 넣는다.
+import Base from '../../../layouts/Base.astro';
+
+const LOG = [];
+---
+<Base title="정정 로그" desc="게시 뒤 오류를 고친 기록(날짜·페이지·문제 번호·내용)">
+  <p class="crumb"><a href="/about/">소개</a> › 정정 로그</p>
+  <h1>정정 로그</h1>
+  <p>게시한 학습 콘텐츠의 오류를 고치면 여기에 남기고, 해당 문제에 '정정됨(날짜)' 표시를 붙입니다. 저작권 침해 신고로 비공개로 돌린 페이지도 여기에 기록합니다.</p>
+  <div class="tw">
+    <table class="wide">
+      <thead><tr><th>날짜</th><th>페이지</th><th>문제</th><th>정정 내용</th></tr></thead>
+      <tbody>
+        {LOG.length === 0
+          ? <tr><td colspan="4" class="muted">아직 정정 기록이 없습니다(콘텐츠 게시 전).</td></tr>
+          : LOG.map((r) => <tr><td>{r.date}</td><td class="l"><a href={r.page}>{r.page}</a></td><td>{r.id}</td><td class="l">{r.what}</td></tr>)}
+      </tbody>
+    </table>
+  </div>
+  <p class="muted">틀린 곳을 발견하셨나요? <a href="/about/report/">오류 제보</a></p>
+</Base>

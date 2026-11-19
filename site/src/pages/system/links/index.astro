@@ -1,0 +1,31 @@
+---
+// 기관 바로가기·연간 일정 `/system/links/`(S4) — 03 화면설계 5절. 자동 수집하지 않는 곳임을 밝힌다(결정 16). 2026-11-19 B-07.
+import Base from '../../../layouts/Base.astro';
+import { LINKS, ANNUAL_2028, SRC } from '../../../lib/system.js';
+---
+<Base title="기관 바로가기·연간 일정" desc="평가원·어디가·대교협·교육부 바로가기와 2028학년도 연간 일정(확정·추정 구분)">
+  <p class="crumb"><a href="/system/">수능 제도</a> › 바로가기·연간 일정</p>
+  <h1>기관 바로가기·연간 일정</h1>
+  <p class="disclaimer" role="note">요약은 참고용입니다. 시험일·전형 일정 등은 반드시 원문(교육부·평가원·대교협·대학)을 확인하세요.</p>
+
+  <h2>기관 바로가기</h2>
+  <div class="cards">
+    {LINKS.map((l) => (
+      <section class="card">
+        <h3><a href={l.url} rel="noopener" target="_blank">{l.name} ↗</a></h3>
+        <p class="muted">{l.what}</p>
+        <p class="muted">{l.auto ? '공지 목록을 매일 자동으로 모읍니다(제목·링크만).' : '자동 수집하지 않는 곳입니다 — 소식은 직접 확인해 주세요.'}</p>
+      </section>
+    ))}
+  </div>
+  <p class="muted">평가원 누리집·어디가는 robots.txt가 자동 수집을 막고 있어 모으지 않습니다. 평가원 소식은 교육부·대교협 보도로 확인합니다.</p>
+
+  <h2>2028학년도 연간 일정</h2>
+  <div class="tw">
+    <table class="wide">
+      <thead><tr><th>시기</th><th>일</th><th>상태</th></tr></thead>
+      <tbody>{ANNUAL_2028.map((a) => <tr><td>{a.when}</td><td class="l">{a.what}{a.note && <><br><span class="muted">{a.note}</span></>}</td><td><span class:list={['st', a.status === '확정' ? 'ok' : 'guess']}>{a.status}</span></td></tr>)}</tbody>
+    </table>
+  </div>
+  <p class="muted">'추정'은 예년(2027학년도) 일정으로 짐작한 것으로, 평가원 시행기본계획(2027-03 말 예상)이 나오면 바로잡습니다. 근거: <a href={SRC.moe2028.url} rel="noopener" target="_blank">교육부 2025-06-01</a>, <a href={SRC.kcue2028.url} rel="noopener" target="_blank">대교협 2026-04-30</a>, <a href={SRC.kcueBasic.url} rel="noopener" target="_blank">대교협 2028학년도 대학입학전형기본사항</a>.</p>
+</Base>

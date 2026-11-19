@@ -1,0 +1,43 @@
+---
+// 구독 `/subscribe/`(A1·A2) — 03 화면설계 7절. 트랙 카드(그날 코호트)·RSS 주소 복사·텔레그램. 2026-11-19 B-07.
+// RSS(B-27)·텔레그램 채널(B-17) 개설 전이라 주소는 보이되 '준비 중'으로 둔다. 구독자 정보는 사이트가 갖지 않는다(P4-3).
+import Base from '../../layouts/Base.astro';
+import { SITE } from '../../lib/site.js';
+import { kstToday, slotsOn } from '../../lib/tracks.js';
+
+const slots = slotsOn(kstToday());
+---
+<Base title="구독" desc="트랙별 RSS와 텔레그램 채널로 매일 아침 오늘의 학습을 받아 보는 방법">
+  <h1>구독</h1>
+  <p>트랙마다 매일 06:00 전후 '오늘의 학습' 1건을 보내 드립니다. RSS 주소는 트랙(고1·고2·고3) 기준이라 학년이 바뀌어도 다시 구독할 필요가 없습니다.</p>
+  <p class="demo" role="note">RSS와 텔레그램 채널은 공개 전에 엽니다. 지금은 주소만 미리 보여 드립니다.</p>
+
+  <div class="cards">
+    {slots.map((s) => {
+      const feed = `${SITE.url}/g${s.grade}/feed.xml`;
+      return (
+        <section class:list={['card', { off: !s.active }]}>
+          <h3>{s.label}</h3>
+          {!s.active && <p class="muted">{s.start} 시작</p>}
+          <p class="muted">받는 내용: 그날 6과목 핵심 개념·연습문제 페이지 링크 1건</p>
+          <p class="feed"><code>{feed}</code> <button type="button" class="copy" data-copy={feed}>주소 복사</button></p>
+          <p class="muted">텔레그램 채널: 준비 중</p>
+        </section>
+      );
+    })}
+  </div>
+
+  <h2>알아 두세요</h2>
+  <ul>
+    <li>사이트는 구독자의 이름·이메일 같은 정보를 받지 않습니다. RSS는 구독 앱이, 텔레그램은 텔레그램이 관리합니다.</li>
+    <li>이메일 구독은 2027년 5월에 다시 검토합니다.</li>
+    <li>입시·기관 공지 RSS는 공지 목록을 연결할 때 함께 정합니다.</li>
+  </ul>
+
+  <script is:inline>
+    document.querySelectorAll('button.copy').forEach((b) => b.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(b.dataset.copy); b.textContent = '복사됨'; } catch (e) { b.textContent = '길게 눌러 복사'; }
+      setTimeout(() => { b.textContent = '주소 복사'; }, 2000);
+    }));
+  </script>
+</Base>

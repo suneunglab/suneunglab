@@ -1,0 +1,18 @@
+---
+// 검색 `/search/`(A11, noindex) — 03 화면설계 8절. Pagefind 연결은 B-27(12/24). 지금은 자리와 대체 경로만. 2026-11-19 B-07.
+import Base from '../../layouts/Base.astro';
+---
+<Base title="검색" noindex>
+  <h1>검색</h1>
+  <form class="filters" role="search" onsubmit="return false">
+    <label class="q">찾을 말 <input type="search" placeholder="예: 이차부등식, 문화 상대주의" disabled /></label>
+  </form>
+  <p class="demo" role="note">검색은 학습 콘텐츠를 올리기 시작할 때 엽니다. 학습·개념 지도·수능 제도 페이지를 찾고, 공지는 <a href="/notices/">입시·기관 공지</a>의 제목 검색을 쓰세요.</p>
+  <h2>바로가기</h2>
+  <ul class="shortcuts">
+    <li><a href="/">홈</a></li>
+    <li><a href="/concepts/">개념 지도</a></li>
+    <li><a href="/system/">수능 제도</a></li>
+    <li><a href="/notices/">입시·기관 공지</a></li>
+  </ul>
+</Base>

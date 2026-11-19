@@ -8,7 +8,7 @@ import '../styles/site.css';
 import { SITE, MENU, FOOTER } from '../lib/site.js';
 import { tracksOn, kstToday } from '../lib/tracks.js';
 
-const { title, desc = SITE.tagline } = Astro.props;
+const { title, desc = SITE.tagline, noindex = false } = Astro.props;   // noindex: 02 사이트맵 5절(봇 안내·검색·404 등)
 const path = Astro.url.pathname;
 const tracks = tracksOn(kstToday());
 const section = path === '/' ? 'home'
@@ -25,7 +25,7 @@ const cur = (href) => (path === href ? 'page' : undefined);
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{pageTitle}</title>
   <meta name="description" content={desc} />
-  {!SITE.index && <meta name="robots" content="noindex" />}
+  {(!SITE.index || noindex) && <meta name="robots" content="noindex" />}
   <link rel="canonical" href={canonical} />
   <meta name="color-scheme" content="light dark" />
   <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />

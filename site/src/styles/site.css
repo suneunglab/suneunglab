@@ -61,3 +61,29 @@ th { background: var(--soft); }
 .demo { border: 1px dashed var(--line); border-radius: var(--radius-sm); padding: 6px 10px; font-size: var(--fs-sm); color: var(--muted); }
 .empty { background: var(--soft); border-radius: var(--radius-sm); padding: 12px 14px; }
 .recent .titles { display: block; font-size: var(--fs-sm); color: var(--muted); margin-top: 2px; }
+
+/* 제도·공지·소개·법적 페이지(B-07, 2026-11-19) */
+.disclaimer { border-left: 4px solid var(--brand-2); background: var(--soft); padding: 8px 12px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; font-size: var(--fs-sm); }
+.notice-box { border: 1px solid var(--line); background: var(--soft); border-radius: var(--radius-sm); padding: 10px 12px; }
+.crumb { font-size: var(--fs-sm); color: var(--muted); margin: 0; }
+table.wide { width: 100%; }
+td.l, th.l { text-align: left; }
+tr.ref td { color: var(--muted); }
+.st { display: inline-block; font-size: var(--fs-xs); border-radius: 6px; padding: 0 6px; border: 1px solid currentColor; white-space: nowrap; }
+.st.ok { color: var(--ok); }
+.st.guess { color: var(--muted); border-style: dashed; }
+.changes li p { margin: 2px 0; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px 12px; margin: 10px 0; font-size: var(--fs-md); }
+.filters label { display: flex; align-items: center; gap: 6px; }
+.filters select, .filters input { font: inherit; color: var(--ink); background: var(--card); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 4px 8px; max-width: 100%; }
+.filters .q { flex: 1 1 220px; }
+.filters .q input { flex: 1; min-width: 0; }
+.status { font-size: var(--fs-sm); color: var(--muted); }
+.feed { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: var(--fs-sm); }
+.feed code { overflow-wrap: anywhere; }
+button.copy { font: inherit; font-size: var(--fs-sm); color: var(--link); background: transparent; border: 1px solid var(--link); border-radius: var(--radius-sm); padding: 2px 8px; cursor: pointer; }
+.flow { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; margin: 8px 0 14px; counter-reset: f; }
+.flow li { counter-increment: f; background: var(--soft); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: var(--fs-sm); }
+.flow li::before { content: counter(f) ". "; font-weight: 700; }
+.wide th, .wide td { white-space: nowrap; }
+.wide td.l { white-space: normal; min-width: 9em; }

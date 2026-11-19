@@ -1,0 +1,16 @@
+---
+// 404 `/404.html`(A12, noindex) — 03 화면설계 8절: 홈·트랙·검색 링크. 2026-11-19 B-07.
+import Base from '../layouts/Base.astro';
+import { kstToday, tracksOn } from '../lib/tracks.js';
+
+const tracks = tracksOn(kstToday());
+---
+<Base title="페이지를 찾을 수 없습니다" noindex>
+  <h1>페이지를 찾을 수 없습니다</h1>
+  <p>주소가 바뀌었거나 아직 만들지 않은 페이지입니다. 아래에서 찾아 보세요.</p>
+  <ul class="shortcuts">
+    <li><a href="/">홈</a></li>
+    {tracks.map((t) => <li><a href={t.href}>{t.label}</a></li>)}
+    <li><a href="/search/">검색</a></li>
+  </ul>
+</Base>
