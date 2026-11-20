@@ -1,0 +1,32 @@
+# 수능 체제 — 04_데이터모델 v1.0 2절 ExamSystem. 2026-11-20 B-09(계획서 58행 앞당김).
+# 근거: 교육부 2028학년도 수능 시험 및 점수 체제 안내(2025-01-21), 평가원 2028학년도 수능 예시문항 안내(2025-04),
+#       평가원 공지 2028학년도 수능 시험시간표 안내(2026-08-25). 2028·2029학년도 같은 체제.
+- id: "2028"
+  curriculum: 2022 개정
+  years: [2028, 2029]
+  areas:
+    - { area: 국어, scope: "화법과 언어 · 독서와 작문 · 문학(모두 같은 시험)", items: "45", time: 80분, grade: 상대평가 }
+    - { area: 수학, scope: "대수 · 미적분Ⅰ · 확률과 통계(모두 같은 시험)", items: "30(단답형 9)", time: 100분, grade: 상대평가 }
+    - { area: 영어, scope: "영어Ⅰ · 영어Ⅱ", items: "45(듣기 17)", time: 70분, grade: 절대평가 }
+    - { area: 한국사(필수), scope: "한국사", items: "20", time: 30분, grade: 절대평가 }
+    - { area: 사회·과학탐구, scope: "통합사회 · 통합과학(둘 다 응시, 점수는 따로)", items: 각 25, time: 각 40분, grade: 상대평가, note: 배점 1.5·2·2.5점 }
+    - { area: 직업탐구, scope: "성공적인 직업 생활", items: "25", time: 40분, grade: 상대평가 }
+    - { area: 제2외국어/한문, scope: "9과목 중 1", items: "20", time: 30분, grade: 절대평가 }
+  timetable:                  # 일반 수험생. 편의 대상자(1.5배·1.7배)는 원문
+    - { period: "-", area: 입실, time: 08:10까지 }
+    - { period: "1", area: 국어, time: 08:40~10:00, minutes: 80 }
+    - { period: "2", area: 수학, time: 10:30~12:10, minutes: 100 }
+    - { period: "-", area: 점심, time: 12:10~13:00, minutes: 50 }
+    - { period: "3", area: 영어, time: 13:10~14:20, minutes: 70 }
+    - { period: "4", area: 한국사, time: 14:50~15:20, minutes: 30 }
+    - { period: "4", area: 사회(통합사회)·직업, time: 15:35~16:15, minutes: 40 }
+    - { period: "4", area: 과학(통합과학), time: 16:30~17:10, minutes: 40 }
+    - { period: "5", area: 제2외국어/한문, time: 17:35~18:05, minutes: 30 }
+  sources:
+    - { org: 교육부, date: 2025-01-21, title: 2028학년도 수능 시험 및 점수 체제 안내, url: "https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=294&boardSeq=102385&lev=0&statusYN=W&s=moe&m=020402&opType=N" }
+    - { org: 평가원, date: 2025-04, title: 2028학년도 수능 예시문항 안내 등 수험자료, url: "https://www.suneung.re.kr/sub/info.do?m=0401&s=suneung" }
+    - { org: 평가원, date: 2026-08-25, title: 2028학년도 수능 시험시간표(일반·경증·중증) 안내, url: "https://www.suneung.re.kr/boardCnts/view.do?boardID=1500229&boardSeq=5096141&lev=0&m=0301&s=suneung" }
+- id: "2027"
+  curriculum: 2015 개정
+  years: [2027]
+  note: 구체제 — 참고용(트랙 미제공, 결정 9). 영역 상세는 싣지 않는다.

@@ -1,6 +1,6 @@
 ---
 // 수능 제도 첫 화면 `/system/`(S1) — 03 화면설계 5절 ①~④. 2026-11-19 B-07(계획서 55행 앞당김).
-// 값은 lib/system.js 한 곳에서 읽는다(B-09에서 repo\data yaml로). 학년도 상세(S2)·S5~S7은 B-12(11/26).
+// 값: 시험일·체제 = 저장소 data/*.yaml(B-09), 변경 이력·출처 = lib/system.js. 학년도 상세(S2)·S5~S7은 B-12(11/26).
 import Base from '../../layouts/Base.astro';
 import { EXAM_YEARS, FORMAT_2028, CHANGES, SRC } from '../../lib/system.js';
 import { kstToday } from '../../lib/tracks.js';
@@ -23,7 +23,7 @@ const recent = CHANGES.slice(0, 3);
             <td>{e.year}</td>
             <td>{e.date}({weekday(e.date)}) <span class:list={['st', e.status === '확정' ? 'ok' : 'guess']}>{e.status}</span>{!e.ref && e.date >= TODAY && <><br><span class="muted">{dday(TODAY, e.date)}</span></>}</td>
             <td>{e.score ?? '—'}</td>
-            <td class="l">{e.note}<br>{e.src ? <a href={SRC[e.src].url} rel="noopener" target="_blank">{SRC[e.src].org} {SRC[e.src].date}</a> : <span class="muted">발표 전</span>}</td>
+            <td class="l">{e.note}<br>{e.source ? <a href={e.source.url} rel="noopener" target="_blank">{e.source.org} {e.source.date}</a> : <span class="muted">발표 전</span>}</td>
           </tr>
         ))}
       </tbody>

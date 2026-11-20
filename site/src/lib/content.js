@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import yaml from 'js-yaml';
 import katex from 'katex';
+import { EXAM_YEAR_ROWS } from './data.js';
 
 export const SUBJECTS = [
   ['korean', '국어'], ['math', '수학'], ['english', '영어'], ['history', '한국사'], ['social', '통합사회'], ['science', '통합과학'],
@@ -66,11 +67,8 @@ export const svg = (s) => String(s || '').replace(/<script[\s\S]*?<\/script>/gi,
 export const choiceMark = (i) => '①②③④⑤'[i];
 export const dots = (d) => '●'.repeat(d) + '○'.repeat(3 - d);
 
-// 수능 시험일(04 데이터모델 ExamYear — 확정 표시 필수, R11)
-export const EXAMS = [
-  { year: 2028, date: '2027-11-18', status: '확정' },
-  { year: 2029, date: '2028-11-16', status: '확정' },
-];
+// 수능 시험일(04 데이터모델 ExamYear — 확정 표시 필수, R11). 2026-11-20 B-09: data/exam_years.yaml에서 읽는다(트랙 제공·확정만).
+export const EXAMS = EXAM_YEAR_ROWS.filter((e) => e.track_provided && e.status === '확정').map((e) => ({ year: e.year, date: e.exam_date, status: e.status }));
 export function dday(from, to) {
   const d = Math.round((Date.parse(to) - Date.parse(from)) / 86400000);
   return d === 0 ? 'D-day' : d > 0 ? `D-${d}` : `D+${-d}`;

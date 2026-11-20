@@ -1,0 +1,43 @@
+# 학년도(시험) — 02_설계 04_데이터모델 v1.0 3절 ExamYear. 2026-11-20 B-09(계획서 58행 앞당김).
+# status: 확정 = 교육부 발표 있음 / 예상 = 발표 전(지침 4 '미확정/추정'). 교육부 발표가 감지되면 확정으로 바꾸고 changes에 한 줄 남긴다(E1).
+# 사이트(site/src/lib/system.js·content.js·tracks.js)가 이 파일을 읽는다 — 값은 여기 한 곳에서만 고친다.
+- year: 2027
+  system: "2027"
+  exam_date: 2026-11-19
+  result_date: 2026-12-11
+  status: 확정
+  announced: 2024-08-16
+  source: https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=294&lev=0&statusYN=W&s=moe&m=020402&opType=N&boardSeq=100526
+  source_org: 교육부
+  track_provided: false       # 결정 9 — 구체제, 참고 행
+  note: 구체제 · 트랙 미제공
+- year: 2028
+  system: "2028"
+  exam_date: 2027-11-18
+  result_date: 2027-12-10
+  status: 확정
+  announced: 2025-06-01
+  source: https://www.moe.go.kr/boardCnts/viewRenew.do?boardID=294&boardSeq=103512&lev=0&m=020402&opType=N&s=moe&statusYN=W
+  source_org: 교육부
+  track_provided: true
+  note: 통합형 수능 첫 시행
+- year: 2029
+  system: "2028"
+  exam_date: 2028-11-16
+  result_date: 2028-12-08
+  status: 확정
+  announced: 2026-08-18
+  source: https://www.korea.kr/multi/visualNewsView.do?newsId=148970336
+  source_org: 교육부(정책브리핑)
+  track_provided: true
+  note: 2028 체제 그대로
+- year: 2030
+  system: "2028"              # 추정 — 교육부가 개편을 발표하면 새 체제 id
+  exam_date: 2029-11-15       # 예상 — 관례(11월 셋째 목요일)
+  result_date: null
+  status: 예상
+  announced: null             # 2027-06~08 발표 예상
+  source: null
+  source_org: null
+  track_provided: true
+  note: 발표 전 — 관례(11월 셋째 목요일)로 계산한 추정

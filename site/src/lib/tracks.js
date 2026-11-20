@@ -2,10 +2,12 @@
 // 학년 규칙: 3월 1일에 새 학년. 코호트 Y(= Y학년도 수능 응시)는 (Y-1)학년도에 고3이다 → 학년 = 학년도 - Y + 4.
 // 결정 2(2028·2029 코호트로 시작, 2027-03-01 2030 추가)·결정 9(2027 코호트 미제공) → 2028 코호트부터 제공.
 // 2026-11-17 B-05. 2026-11-18 B-06: 슬롯(고1~고3) 안내·트랙 설명·코호트 시험일 추가.
-// B-09(cohorts.yaml)·B-11(학년도·트랙 계산)에서 데이터 기준 계산으로 바꾼다.
+// 2026-11-20 B-09: 첫 코호트는 data/cohorts.yaml에서. 날짜별 활성 기간(active_from·to) 반영은 B-11(학년도·트랙 계산).
 import { EXAMS } from './content.js';
+import { COHORT_ROWS } from './data.js';
 
-export const FIRST_COHORT = 2028;
+// 제공하는 첫 코호트 — 2026-11-20 B-09: data/cohorts.yaml에서 읽는다(현재 2028)
+export const FIRST_COHORT = Math.min(...COHORT_ROWS.map((c) => c.id));
 
 // 한국 시간(KST) 기준 오늘 날짜 'YYYY-MM-DD'
 export function kstToday(now = new Date()) {

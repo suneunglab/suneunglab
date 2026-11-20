@@ -1,0 +1,19 @@
+# 등급 구분 점수 — 백로그 B-09('등급 구분 점수 yaml'), S6 '성적 읽는 법'(B-12)의 근거 자료. 2026-11-20 작성.
+# 근거: 03_참고자료 수능_공식자료_정리_2028.md 7절 — 평가원 「2027학년도 수능 이렇게 준비하세요」 p.9(절대평가 구분 원점수),
+#       평가원 2026학년도 수능 등급 구분 점수 자료(2025-12-04). 2028학년도 제2외국어/한문 구분 점수는 미확정(문항·배점 변경).
+relative_ratio:               # 상대평가 등급 비율(%), 경계 동점자는 위 등급
+  grade_pct: [4, 7, 12, 17, 20, 17, 12, 7, 4]
+  cumulative_pct: [4, 11, 23, 40, 60, 77, 89, 96, 100]
+absolute_raw:                 # 절대평가 등급 구분 원점수(2027학년도 기준) — 2028 시행기본계획(2027-03 말 예상)으로 다시 확인
+  basis: 2027학년도 기준
+  english: { full: 100, grade1: 90, step: 10 }
+  korean_history: { full: 50, grade1: 40, step: 5 }
+  second_language: { full: 50, grade1: 45, step: 5, note: 2028학년도는 미확정 }
+recent_grade1:                # 최근 실제 결과(예시 자료)
+  - { year: 2026, area: 국어, kind: 표준점수, cut: 133, pct: 4.67 }
+  - { year: 2026, area: 수학, kind: 표준점수, cut: 128, pct: 4.62 }
+  - { year: 2026, area: 영어, kind: 원점수, cut: 90, pct: 3.11 }
+  - { year: 2026, area: 한국사, kind: 원점수, cut: 40, pct: 15.23 }
+sources:
+  - { org: 평가원, date: 2026-03-31, title: 2027학년도 수능 이렇게 준비하세요(p.9), url: "https://www.suneung.re.kr/sub/info.do?m=0401&s=suneung" }
+  - { org: 평가원, date: 2025-12-04, title: 2026학년도 수능 등급 구분 표준점수·절대평가 등급 구분 점수, url: "https://www.suneung.re.kr/sub/info.do?m=0401&s=suneung" }
