@@ -20,7 +20,7 @@ const demo = active.some((c) => !c.real);
 const cohorts = new Set(active.map((c) => c.cohort));
 const band = EXAMS.filter((e) => cohorts.has(e.year) && e.date >= TODAY);
 // ③ 오늘의 개념 한 줄: 트랙마다 요일별로 과목을 돌린다(P3-3)
-const wd = new Date(`${TODAY}T00:00:00+09:00`).getUTCDay();
+const wd = new Date(`${TODAY}T00:00:00Z`).getUTCDay();
 const lines = active.map((c, i) => {
   const [k, n] = SUBJECTS[(wd + i) % SUBJECTS.length];
   const text = c.real ? (c.day[k]?.concept?.summary ?? '') : `${DEMO_TITLES[c.grade][k]}(예시 — 실제 한 줄 요약은 생성 콘텐츠 연결 뒤 표시)`;

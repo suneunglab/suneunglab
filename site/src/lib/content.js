@@ -73,4 +73,4 @@ export function dday(from, to) {
   const d = Math.round((Date.parse(to) - Date.parse(from)) / 86400000);
   return d === 0 ? 'D-day' : d > 0 ? `D-${d}` : `D+${-d}`;
 }
-export const weekday = (iso) => '일월화수목금토'[new Date(iso + 'T00:00:00+09:00').getUTCDay()];
+export const weekday = (iso) => '일월화수목금토'[new Date(iso + 'T00:00:00Z').getUTCDay()];
