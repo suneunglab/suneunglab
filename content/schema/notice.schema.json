@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://suneunglab.com/schema/notice.schema.json",
+  "title": "Notice 공지 1건(04 데이터모델 9절, 05 4·9절) — data/notices/{YYYY}/{MM}.jsonl 한 줄",
+  "type": "object",
+  "required": ["id", "org", "board", "title", "title_raw", "posted", "url", "category", "summary", "content_hash", "first_seen", "last_seen"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^[0-9a-f]{16}$"},
+    "org": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+    "board": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+    "title": {"type": "string", "minLength": 1},
+    "title_raw": {"type": "string", "minLength": 1},
+    "posted": {"type": "string", "format": "date"},
+    "url": {"type": "string", "pattern": "^https?://"},
+    "category": {"enum": ["policy", "schedule", "mock", "early", "regular", "result", "etc"]},
+    "summary": {"type": "string", "pattern": "원문 확인"},
+    "content_hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "first_seen": {"type": "string", "format": "date-time"},
+    "last_seen": {"type": "string", "format": "date-time"},
+    "example": {"type": "boolean"}
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://suneunglab.com/schema/verify_log.schema.json",
+  "title": "검증 로그 1건(04 10-1절, 06 6절 V-1~V-8) — logs/verify/{YYYY-MM-DD}.jsonl 한 줄. 공개해도 되는 정보만(원문·정답 외 비공개 내용 없음)",
+  "type": "object",
+  "required": ["date", "problem_id", "checks", "result", "at"],
+  "additionalProperties": false,
+  "properties": {
+    "date": {"type": "string", "format": "date"},
+    "problem_id": {"type": "string", "pattern": "^20[0-9]{2}-20[0-9]{2}-[01][0-9]-[0-3][0-9]-(korean|math|english|history|social|science)-[1-5]$"},
+    "checks": {
+      "type": "object",
+      "required": ["V-1", "V-2", "V-5", "V-6", "V-7", "V-8"],
+      "additionalProperties": false,
+      "patternProperties": {"^V-[1-8]$": {"enum": ["통과", "보류", "해당 없음", "수정"]}}
+    },
+    "result": {"enum": ["게시", "보류"]},
+    "retry": {"type": "integer", "minimum": 0, "maximum": 1},
+    "at": {"type": "string", "format": "date-time"},
+    "example": {"type": "boolean"}
+  }
+}

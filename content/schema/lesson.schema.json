@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://suneunglab.com/schema/lesson.schema.json",
+  "title": "DailyLesson 학습 파일 머리말(04 데이터모델 7·8·8-1절, 06 1·5절)",
+  "type": "object",
+  "required": ["id", "cohort", "date", "status", "badge", "subjects"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^20[0-9]{2}-20[0-9]{2}-[01][0-9]-[0-3][0-9]$"},
+    "cohort": {"type": "integer", "minimum": 2028},
+    "date": {"type": "string", "format": "date"},
+    "status": {"enum": ["게시", "보류", "예비분"]},
+    "hold_reason": {"type": "string"},
+    "badge": {"enum": ["자동 검증", "사람 검수"]},
+    "example": {"type": "boolean", "description": "true = 예시 파일(사이트에 게시하지 않음)"},
+    "prompt_version": {"type": "string"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "verified_at": {"type": "string", "format": "date-time"},
+    "subjects": {"type": "array", "minItems": 1, "maxItems": 6, "items": {"$ref": "#/$defs/subject"}}
+  },
+  "$defs": {
+    "code": {"type": "string", "pattern": "^\\[[0-9]{2}[^\\[\\]\\s]+-[0-9]{2}\\]$"},
+    "copyright": {
+      "type": "object",
+      "required": ["overlap_check", "max_overlap_words", "max_overlap_chars", "exam_variant"],
+      "additionalProperties": false,
+      "properties": {
+        "overlap_check": {"enum": ["통과", "보류"]},
+        "max_overlap_words": {"type": "integer", "minimum": 0},
+        "max_overlap_chars": {"type": "integer", "minimum": 0},
+        "exam_variant": {"enum": ["아님", "보류"]},
+        "literature": {"type": ["array", "null"], "items": {"type": "object", "required": ["work", "author", "author_death_year", "source"], "properties": {"work": {"type": "string"}, "author": {"type": "string"}, "author_death_year": {"type": "integer"}, "source": {"type": "string"}}}}
+      }
+    },
+    "exam_ref": {"type": "object", "required": ["label", "url"], "additionalProperties": false, "properties": {"label": {"type": "string"}, "url": {"type": "string", "pattern": "^https://"}}},
+    "concept": {
+      "type": "object",
+      "required": ["title", "standards", "summary", "definition", "principle", "examples", "pitfalls", "textbook_ref", "exam_refs", "copyright"],
+      "additionalProperties": false,
+      "properties": {
+        "title": {"type": "string", "minLength": 1, "maxLength": 30},
+        "standards": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/code"}},
+        "summary": {"type": "string", "minLength": 1, "maxLength": 80},
+        "definition": {"type": "string", "minLength": 1},
+        "principle": {"type": "string", "minLength": 1},
+        "examples": {"type": "array", "minItems": 1, "maxItems": 2, "items": {"type": "string"}},
+        "pitfalls": {"type": "array", "minItems": 2, "maxItems": 3, "items": {"type": "string"}},
+        "textbook_ref": {"type": "string", "minLength": 1},
+        "exam_refs": {"type": "array", "maxItems": 2, "items": {"$ref": "#/$defs/exam_ref"}},
+        "copyright": {"$ref": "#/$defs/copyright"}
+      }
+    },
+    "problem": {
+      "type": "object",
+      "required": ["num", "format", "difficulty", "standard", "content_area", "behavior", "points", "intent", "stem", "answer", "explanation", "verification", "copyright"],
+      "additionalProperties": false,
+      "properties": {
+        "num": {"type": "integer", "minimum": 1},
+        "id": {"type": "string"},
+        "format": {"enum": ["5지선다", "단답형"]},
+        "difficulty": {"enum": [1, 2, 3]},
+        "standard": {"$ref": "#/$defs/code"},
+        "content_area": {"type": "string", "minLength": 1},
+        "behavior": {"type": "string"},
+        "points": {"enum": [1.5, 2, 2.5, 3, 4]},
+        "intent": {"type": "string", "minLength": 1},
+        "passage": {"type": "string"},
+        "stem": {"type": "string", "minLength": 1},
+        "choices": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "answer": {"type": ["string", "integer"]},
+        "explanation": {"type": "string", "minLength": 1},
+        "figures": {"type": "array", "items": {"type": "string", "pattern": "^fig/[a-z0-9-]+\\.svg$"}},
+        "exam_refs": {"type": "array", "items": {"$ref": "#/$defs/exam_ref"}},
+        "verification": {
+          "type": "object", "required": ["method", "result"], "additionalProperties": false,
+          "properties": {"method": {"type": "array", "minItems": 1, "items": {"enum": ["분리 검증", "코드 검산"]}}, "result": {"enum": ["일치", "불일치"]}, "log": {"type": "string"}, "behavior_checked": {"type": "string"}}
+        },
+        "review": {"type": "object", "additionalProperties": false, "properties": {"human": {"type": "boolean"}, "date": {"type": "string", "format": "date"}}},
+        "copyright": {"$ref": "#/$defs/copyright"},
+        "corrections": {"type": "array", "items": {"type": "object", "required": ["date", "note"], "properties": {"date": {"type": "string", "format": "date"}, "note": {"type": "string"}}}}
+      }
+    },
+    "subject": {
+      "type": "object",
+      "required": ["subject", "concept", "problems"],
+      "additionalProperties": false,
+      "properties": {
+        "subject": {"enum": ["korean", "math", "english", "history", "social", "science"]},
+        "concept": {"$ref": "#/$defs/concept"},
+        "passage": {"type": "string"},
+        "problems": {"type": "array", "minItems": 3, "maxItems": 5, "items": {"$ref": "#/$defs/problem"}}
+      }
+    }
+  }
+}

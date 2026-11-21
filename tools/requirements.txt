@@ -1,0 +1,3 @@
+# 콘텐츠 검사(tools/validate_content.py) 의존성
+jsonschema>=4.18
+pyyaml>=6.0
