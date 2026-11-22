@@ -1,0 +1,15 @@
+---
+// D-day 표시 컴포넌트 — 2026-11-22 B-11. 확정/예상을 함께 보인다(R11·지침 4). 기준일은 빌드한 날(KST) 또는 페이지 날짜.
+// form: chip(홈 띠) | short(트랙 첫 화면) | long(코호트 첫 화면) | page(오늘의 학습 머리줄)
+import { examOf, dday } from '../lib/calendar.js';
+import { EXAM_YEAR_ROWS } from '../lib/data.js';
+import { weekday } from '../lib/content.js';
+
+const { cohort, from, form = 'short' } = Astro.props;
+const e = examOf(Number(cohort), EXAM_YEAR_ROWS);
+const d = dday(from, e.date);
+---
+{form === 'chip' && <span class="chip">{e.year} 수능 <b>{d}</b>({e.status})</span>}
+{form === 'short' && <>{e.date} 수능 · {d}({e.status})</>}
+{form === 'long' && <>{e.year}학년도 수능 {e.date}({weekday(e.date)}) · {d}({e.status})</>}
+{form === 'page' && <>{d}({e.status})</>}

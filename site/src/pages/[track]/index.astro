@@ -2,8 +2,8 @@
 // 트랙 첫 화면 `/g1/`·`/g2/`·`/g3/`(T1) — 03 화면설계 2절. 그날 그 슬롯의 코호트로 안내만 한다(04 5절: 저장하지 않고 계산).
 // 2026-11-18 B-06. 제공하지 않는 슬롯(예: 2026-11의 고3)은 시작일 안내만 보인다.
 import Base from '../../layouts/Base.astro';
-import { kstToday, slotsOn, TRACK_INFO, examFor } from '../../lib/tracks.js';
-import { dday } from '../../lib/content.js';
+import { kstToday, slotsOn, TRACK_INFO } from '../../lib/tracks.js';
+import DDay from '../../components/DDay.astro';
 
 export function getStaticPaths() {
   return ['g1', 'g2', 'g3'].map((track) => ({ params: { track } }));
@@ -12,7 +12,6 @@ const { track } = Astro.params;
 const TODAY = kstToday();
 const s = slotsOn(TODAY)[Number(track.slice(1)) - 1];
 const info = TRACK_INFO[s.grade];
-const exam = s.active ? examFor(s.cohort) : null;
 const base = `/${track}/${s.cohort}`;
 ---
 <Base title={s.active ? s.label : `고${s.grade} 트랙`}>
@@ -21,7 +20,7 @@ const base = `/${track}/${s.cohort}`;
       <>
         <h1>{s.label}</h1>
         <p class="muted">범위: {info.scope}<br>난이도: {info.level} · 과목당 {info.count}문항</p>
-        <p class="head-line">{exam ? <>{exam.date} 수능 · {dday(TODAY, exam.date)}({exam.status})</> : '수능 시험일 미확정'}</p>
+        <p class="head-line"><DDay cohort={s.cohort} from={TODAY} form="short" /></p>
         <p><a class="btn big" href={`${base}/${TODAY}/`}>오늘의 학습({TODAY}) →</a></p>
         <h2>바로가기</h2>
         <ul class="shortcuts">

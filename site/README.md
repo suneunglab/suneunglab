@@ -65,6 +65,13 @@ DATA_DIR=<YAML 폴더> npx astro build   # 콘텐츠 넣어 빌드
 - 날짜는 js-yaml이 Date로 읽으므로 `data.js`가 `YYYY-MM-DD` 문자열로 되돌린다. '확정'인데 근거(source·성적 통지일)가 없으면 빌드가 멈춘다.
 - 옮긴 뒤 26페이지 출력이 옮기기 전과 똑같은지 비교해 확인했다.
 
+## 학년도·트랙·D-day 계산(B-11, 2026-11-22 — 계획서 60행 앞당김)
+- 계산은 `src/lib/calendar.js`(순수 함수) 한 곳: 학교 연도(3/1 시작), 학년 = 학교 연도 − 코호트 + 4, 상태(입학 전·학습·정시·졸업 — 수능 다음 날 정시, 3/1 졸업), 시험일(exam_years 값, 없으면 11월 셋째 목요일 '예상'), 홈 D-day 띠, 그날 생성할 코호트(cohorts.yaml active_from 반영). 근거: 04 데이터모델 4-1·11절 E-1~E-5·E-8.
+- 화면은 `src/components/DDay.astro`(확정/예상 함께 표시) — 홈 띠·트랙·코호트·오늘의 학습 머리줄이 모두 이 컴포넌트를 쓴다.
+- 생성 파이프라인용 같은 규칙: `tools/cohort.py`(`python tools/cohort.py 2027-03-01` → 그날 슬롯·생성 대상·띠 JSON).
+- 시험: `python tools/test_cohort_parity.py` — 경계일(2/28·3/1·수능 전날·당일·다음 날, 2027~2032) 32개 날짜에서 Python·JS 결과 일치 + 11-2절 전환 시간표 기대값.
+- 옮긴 뒤 26페이지 출력이 옮기기 전과 바이트 단위로 같음(2026-11-22 확인).
+
 ## 배포(B-08 준비, 2026-11-20 — 실제 연결은 2027-01-16 Paul, 결정 27: 공개 출시 전 비공개 유지)
 - 방식(권장): **Cloudflare Pages의 GitHub 연결** — 공개 저장소 `main`에 커밋하면 Cloudflare가 직접 빌드·배포한다. API 토큰·비밀값이 저장소나 Claude를 거치지 않는다. 08 기술스택 3절 '공개 저장소 커밋 시 자동'과 같다(백로그 문구 'GitHub Actions →'는 11/21 Paul 확인 뒤 정정).
 - Pages 빌드 설정: 프레임워크 Astro · 빌드 명령 `npm run build` · 출력 `dist` · **루트 디렉터리 `site`** · Node는 `site/.node-version`(22).

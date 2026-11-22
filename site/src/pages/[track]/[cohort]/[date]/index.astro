@@ -2,25 +2,26 @@
 // 오늘의 학습 `/g3/2028/2027-03-15/`(T3) — 03 화면설계 3절.
 // 2026-11-18 B-06: 그날(빌드한 날, KST) 트랙별 페이지를 만든다. 11/09 시안 페이지 2개는 점검 기준으로 남긴다(B-13에서 실데이터로 정리).
 import Base from '../../../../layouts/Base.astro';
-import { loadDay, SUBJECTS, BEHAVIOR, rich, svg, choiceMark, dots, dday, weekday } from '../../../../lib/content.js';
-import { kstToday, tracksOn, examFor } from '../../../../lib/tracks.js';
+import { loadDay, SUBJECTS, BEHAVIOR, rich, svg, choiceMark, dots, weekday } from '../../../../lib/content.js';
+import { kstToday, tracksOn } from '../../../../lib/tracks.js';
+import DDay from '../../../../components/DDay.astro';
 export function getStaticPaths() {
   const SAMPLE = [
-    { params: { track: 'g1', cohort: '2029', date: '2026-11-09' }, props: { label: '고1 · 2029 수능', exam: '2028-11-16' } },
-    { params: { track: 'g3', cohort: '2028', date: '2026-11-09' }, props: { label: '고3 · 2028 수능', exam: '2027-11-18' } },
+    { params: { track: 'g1', cohort: '2029', date: '2026-11-09' }, props: { label: '고1 · 2029 수능' } },
+    { params: { track: 'g3', cohort: '2028', date: '2026-11-09' }, props: { label: '고3 · 2028 수능' } },
   ];
   const today = kstToday();
-  const live = tracksOn(today).map((t) => ({ params: { track: `g${t.grade}`, cohort: String(t.cohort), date: today }, props: { label: t.label, exam: examFor(t.cohort)?.date ?? null } }));
+  const live = tracksOn(today).map((t) => ({ params: { track: `g${t.grade}`, cohort: String(t.cohort), date: today }, props: { label: t.label } }));
   const key = (x) => `${x.params.track}/${x.params.cohort}/${x.params.date}`;
   const seen = new Set(live.map(key));
   return [...live, ...SAMPLE.filter((x) => !seen.has(key(x)))];
 }
-const { track, cohort, date: DATE } = Astro.params; const { label, exam } = Astro.props;
+const { track, cohort, date: DATE } = Astro.params; const { label } = Astro.props;
 const day = loadDay(track, DATE);
 const avail = SUBJECTS.filter(([k]) => day[k]);
 ---
 <Base title={`${label} ${DATE} 오늘의 학습`}>
-  <p class="head-line">{label} | {DATE}({weekday(DATE)}) | {exam ? `${dday(DATE, exam)}(확정)` : '수능 시험일 미확정'}</p>
+  <p class="head-line">{label} | {DATE}({weekday(DATE)}) | <DDay cohort={cohort} from={DATE} form="page" /></p>
   <h1>오늘의 학습 — 6과목 개념과 문제</h1>
   <div class="datenav"><span>◀ 전날</span><a href={`/${track}/${cohort}/`}>아카이브</a><span>다음날 ▶</span></div>
   {avail.length === 0 && <p class="empty">오늘 학습을 준비하고 있습니다. 매일 아침 게시하며, 생성이 늦어지면 07:00·09:00에 다시 시도합니다.</p>}

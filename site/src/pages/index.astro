@@ -2,8 +2,9 @@
 // 홈 `/`(M1) — 03 화면설계 1절 ①~⑥. 2026-11-18 B-06: 기준일 = 빌드한 날(KST), 트랙 카드 = 그날 코호트(tracks.js).
 // 생성 콘텐츠(DATA_DIR)가 없으면 예시 제목(demo.js)을 '예시'로 표시한다 — 실데이터 연결은 B-13.
 import Base from '../layouts/Base.astro';
-import { loadDay, SUBJECTS, EXAMS, dday } from '../lib/content.js';
-import { kstToday, slotsOn, TRACK_INFO } from '../lib/tracks.js';
+import { loadDay, SUBJECTS } from '../lib/content.js';
+import { kstToday, slotsOn, TRACK_INFO, bandOn } from '../lib/tracks.js';
+import DDay from '../components/DDay.astro';
 import { DEMO_TITLES, DEMO_NOTICES, upcoming } from '../lib/demo.js';
 
 const TODAY = kstToday();
@@ -17,8 +18,7 @@ const cards = slots.map((s) => {
 const active = cards.filter((c) => c.active);
 const demo = active.some((c) => !c.real);
 // ① D-day 띠: 제공 코호트의 수능만, 시험 다음 날부터 빠진다(R11, 결정 9)
-const cohorts = new Set(active.map((c) => c.cohort));
-const band = EXAMS.filter((e) => cohorts.has(e.year) && e.date >= TODAY);
+const band = bandOn(TODAY); // 2026-11-22 B-11: calendar.js bandCohorts
 // ③ 오늘의 개념 한 줄: 트랙마다 요일별로 과목을 돌린다(P3-3)
 const wd = new Date(`${TODAY}T00:00:00Z`).getUTCDay();
 const lines = active.map((c, i) => {
@@ -29,7 +29,7 @@ const lines = active.map((c, i) => {
 const schedule = upcoming(TODAY, 3);
 ---
 <Base title="홈">
-  <div class="band">{band.map((e) => <span class="chip">{e.year} 수능 <b>{dday(TODAY, e.date)}</b>({e.status})</span>)}</div>
+  <div class="band">{band.map((e) => <DDay cohort={e.year} from={TODAY} form="chip" />)}</div>
   <p class="muted">기준일 {TODAY} · 날마다 트랙별 6과목 핵심 개념과 연습문제를 새로 씁니다.</p>
   {demo && <p class="demo" role="note">지금 보이는 과목 제목은 화면 확인용 예시입니다. 공개 전에 실제 학습 콘텐츠로 바뀝니다.</p>}
 
