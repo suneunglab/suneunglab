@@ -87,3 +87,20 @@ button.copy { font: inherit; font-size: var(--fs-sm); color: var(--link); backgr
 .flow li::before { content: counter(f) ". "; font-weight: 700; }
 .wide th, .wide td { white-space: nowrap; }
 .wide td.l { white-space: normal; min-width: 9em; }
+/* B-12(2026-11-23): 수능 제도 S2·S5~S7·변경 이력 타임라인 */
+.facts { display: grid; gap: 6px 16px; margin: 12px 0; }
+.facts > div { display: grid; grid-template-columns: 6.5em 1fr; gap: 12px; border-bottom: 1px solid var(--line); padding: 6px 0; }
+.facts dt { font-weight: 700; color: var(--muted); font-size: var(--fs-sm); }
+.facts dd { margin: 0; font-size: var(--fs-body); }
+.card .sub { margin: 10px 0 4px; font-size: var(--fs-sm); font-weight: 700; color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px 0; margin: 4px 0; }
+.chips .tag { color: var(--ink); }
+.principles li, .check li { margin: 6px 0; font-size: var(--fs-body); }
+.check { list-style: none; padding-left: 0; }
+.check li { padding-left: 1.6em; position: relative; }
+.check li::before { content: "☐"; position: absolute; left: 0; color: var(--link); }
+.timeline { list-style: none; margin: 0 0 8px; padding: 0 0 0 18px; border-left: 2px solid var(--line); }
+.timeline li { position: relative; padding: 6px 0 12px 10px; }
+.timeline li::before { content: ""; position: absolute; left: -25px; top: 12px; width: 10px; height: 10px; border-radius: 50%; background: var(--brand-2); border: 2px solid var(--bg); }
+.timeline p { margin: 2px 0; font-size: var(--fs-body); }
+.timeline .when time { font-weight: 700; margin-right: 6px; }

@@ -12,8 +12,10 @@ const DIST = path.join(__dirname, '..', 'dist');
 const PAGES = [['system', '/system/'], ['changes', '/system/changes/'], ['links', '/system/links/'], ['notices', '/notices/'],
   ['subscribe', '/subscribe/'], ['concepts', '/concepts/'], ['about', '/about/'], ['how', '/about/how-it-works/'],
   ['license', '/about/license/'], ['corrections', '/about/corrections/'], ['report', '/about/report/'], ['bot', '/about/bot/'],
-  ['privacy', '/privacy/'], ['contact', '/contact/'], ['search', '/search/'], ['404', '/404.html']];
-const SHOT = new Set(['system', 'links', 'notices', 'subscribe', 'how', 'privacy']);
+  ['privacy', '/privacy/'], ['contact', '/contact/'], ['search', '/search/'], ['404', '/404.html'],
+  // B-12(2026-11-23): 수능 제도 S2·S5~S7
+  ['y2028', '/system/2028/'], ['y2029', '/system/2029/'], ['areas', '/system/2028/areas/'], ['scores', '/system/2028/scores/'], ['examday', '/system/2028/exam-day/']];
+const SHOT = new Set((process.env.SHOT_SET || 'system,links,notices,subscribe,how,privacy').split(','));
 
 // ⑤ 깨진 내부 링크(정적 검사)
 function brokenLinks() {

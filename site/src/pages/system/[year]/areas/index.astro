@@ -1,0 +1,50 @@
+---
+// 수능은 이렇게 본다 `/system/2028/areas/`(S5) — 03 화면설계 5절 ①~⑤. 2026-11-23 B-12(계획서 61행 앞당김).
+// 요소 이름은 저장소 data/assessment.yaml, 설명은 사이트가 새로 쓴 요약(결정 17·19·20). 평가원 문장은 옮기지 않는다.
+import Base from '../../../../layouts/Base.astro';
+import { SYSTEM_YEARS, PRINCIPLES } from '../../../../lib/system.js';
+import { ASSESSMENT } from '../../../../lib/data.js';
+
+export function getStaticPaths() {
+  return SYSTEM_YEARS.map(({ year, system }) => ({ params: { year: String(year) }, props: { year, system } }));
+}
+const { year, system } = Astro.props;
+const fmt = Object.fromEntries(system.areas.map((a) => [a.area.replace('(필수)', ''), a]));
+const fmtOf = (name) => fmt[name] ?? system.areas.find((a) => a.scope.includes(name));
+const E = ASSESSMENT.ebs;
+---
+<Base title={`수능은 이렇게 본다 — ${year}학년도`} desc={`${year}학년도 수능 영역별 문항·시간·배점, 평가 요소(내용·행동 영역), 출제 원칙, EBS 연계`}>
+  <p class="crumb"><a href="/system/">수능 제도</a> › <a href={`/system/${year}/`}>{year}학년도</a> › 수능은 이렇게 본다</p>
+  <h1>수능은 이렇게 본다</h1>
+  <p class="disclaimer" role="note">평가원 자료를 우리 말로 요약한 것입니다. 정확한 내용은 아래 원문을 확인하세요.</p>
+
+  <h2>영역별 한눈에</h2>
+  <div class="cards">
+    {ASSESSMENT.areas.map((a) => {
+      const f = fmtOf(a.area);
+      return (
+        <section class="card">
+          <h3>{a.area}</h3>
+          <p class="muted">{f ? `${String(f.items).replace(/^(각 )?(\d+)/, '$1$2문항')} · ${f.time} · ${a.points} · ${f.grade}` : a.points}</p>
+          <p>{a.summary}</p>
+          <p class="sub">내용 영역</p>
+          <p class="chips">{a.content.map((c) => <span class="tag">{c}</span>)}</p>
+          <p class="sub">행동 영역(무엇을 할 수 있는지)</p>
+          <p class="chips">{a.behavior.map((c) => <span class="tag">{c}</span>)}</p>
+          <p class="muted">근거: 평가원 {a.basis}</p>
+        </section>
+      );
+    })}
+  </div>
+  <p class="muted">{ASSESSMENT.basis_note} 이 사이트의 문제마다 붙는 행동 영역 배지는 위 이름을 따릅니다.</p>
+
+  <h2>출제 원칙 다섯 가지</h2>
+  <ol class="principles">{PRINCIPLES.map((p) => <li>{p}</li>)}</ol>
+
+  <h2>EBS 연계</h2>
+  <p>영역·과목별로 <b>{E.rate}</b>를 EBS 교재와 연계하며, 방식은 <b>{E.method}</b>입니다. 대상은 {E.target}입니다. 같은 문항을 그대로 내지 않고 개념·자료·지문의 핵심을 활용합니다.</p>
+  <p class="muted">이 사이트는 EBS 교재 내용을 싣지 않습니다(저작권). 교재와 강의는 <a href="https://www.ebsi.co.kr" rel="noopener" target="_blank">EBSi ↗</a>에서 보세요.</p>
+
+  <h2>원문</h2>
+  <ul class="list">{ASSESSMENT.sources.map((s) => <li><a href={s.url} rel="noopener" target="_blank">{s.org} {s.date} — {s.title} ↗</a></li>)}</ul>
+</Base>

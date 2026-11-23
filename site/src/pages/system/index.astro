@@ -1,13 +1,14 @@
 ---
 // 수능 제도 첫 화면 `/system/`(S1) — 03 화면설계 5절 ①~④. 2026-11-19 B-07(계획서 55행 앞당김).
-// 값: 시험일·체제 = 저장소 data/*.yaml(B-09), 변경 이력·출처 = lib/system.js. 학년도 상세(S2)·S5~S7은 B-12(11/26).
+// 값: 시험일·체제 = 저장소 data/*.yaml(B-09), 변경 이력·출처 = lib/system.js. 2026-11-23 B-12: 학년도 상세(S2)·S5~S7 링크.
 import Base from '../../layouts/Base.astro';
-import { EXAM_YEARS, FORMAT_2028, CHANGES, SRC } from '../../lib/system.js';
+import { EXAM_YEARS, FORMAT_2028, CHANGES, SRC, SYSTEM_YEARS, SUB_PAGES } from '../../lib/system.js';
 import { kstToday } from '../../lib/tracks.js';
 import { dday, weekday } from '../../lib/content.js';
 
 const TODAY = kstToday();
 const recent = CHANGES.slice(0, 3);
+const detail = new Set(SYSTEM_YEARS.map((x) => x.year));
 ---
 <Base title="수능 제도" desc="학년도별 수능 시험일(확정·예상)과 2028학년도 통합형 수능 체제 요약, 변경 이력, 기관 바로가기">
   <h1>수능 제도</h1>
@@ -20,7 +21,7 @@ const recent = CHANGES.slice(0, 3);
       <tbody>
         {EXAM_YEARS.map((e) => (
           <tr class:list={[{ ref: e.ref }]}>
-            <td>{e.year}</td>
+            <td>{detail.has(e.year) ? <a href={`/system/${e.year}/`}>{e.year}</a> : e.year}</td>
             <td>{e.date}({weekday(e.date)}) <span class:list={['st', e.status === '확정' ? 'ok' : 'guess']}>{e.status}</span>{!e.ref && e.date >= TODAY && <><br><span class="muted">{dday(TODAY, e.date)}</span></>}</td>
             <td>{e.score ?? '—'}</td>
             <td class="l">{e.note}<br>{e.source ? <a href={e.source.url} rel="noopener" target="_blank">{e.source.org} {e.source.date}</a> : <span class="muted">발표 전</span>}</td>
@@ -39,7 +40,11 @@ const recent = CHANGES.slice(0, 3);
       <tbody>{FORMAT_2028.map((f) => <tr><td>{f.area}</td><td class="l">{f.scope}</td><td>{f.items}</td><td>{f.time}</td><td>{f.grade}</td></tr>)}</tbody>
     </table>
   </div>
-  <p class="muted">근거: <a href={SRC.moe2028sys.url} rel="noopener" target="_blank">교육부 2028학년도 수능 시험 및 점수 체제 안내(2025-01-21)</a>, <a href={SRC.kiceData.url} rel="noopener" target="_blank">평가원 수험자료</a>. 학년도별 시험시간표·영역별 평가 방식·성적 읽는 법·시험 당일 안내 페이지는 준비 중입니다.</p>
+  <p class="muted">근거: <a href={SRC.moe2028sys.url} rel="noopener" target="_blank">교육부 2028학년도 수능 시험 및 점수 체제 안내(2025-01-21)</a>, <a href={SRC.kiceData.url} rel="noopener" target="_blank">평가원 수험자료</a>.</p>
+  <ul class="list">
+    {SYSTEM_YEARS.map(({ year }) => <li><a href={`/system/${year}/`}><b>{year}학년도</b> 시험일·체제·시험시간표 →</a></li>)}
+    {SUB_PAGES.map(([slug, name, what]) => <li><a href={`/system/2028/${slug}/`}>{name} →</a><br><span class="muted">{what}</span></li>)}
+  </ul>
 
   <h2>최근 변경</h2>
   <ul class="list">{recent.map((c) => <li><span class="tag">{c.year}학년도</span>{c.item}: {c.after}<br><span class="muted">{c.date} · <a href={SRC[c.src].url} rel="noopener" target="_blank">{SRC[c.src].org} 원문</a></span></li>)}</ul>

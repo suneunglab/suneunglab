@@ -1,0 +1,50 @@
+---
+// 시험 당일 안내 `/system/2028/exam-day/`(S7) — 03 화면설계 5절 ①~⑤. 2026-11-23 B-12(계획서 61행 앞당김).
+// 내용은 저장소 data/exam_day.yaml, 시각표는 exam_systems.yaml. 평가원 유의사항(매년 10월) 발표 전에는 '작년 기준' 표시.
+import Base from '../../../../layouts/Base.astro';
+import { SYSTEM_YEARS } from '../../../../lib/system.js';
+import { EXAM_DAY as D } from '../../../../lib/data.js';
+
+export function getStaticPaths() {
+  return SYSTEM_YEARS.map(({ year, system }) => ({ params: { year: String(year) }, props: { year, system } }));
+}
+const { year, system } = Astro.props;
+---
+<Base title={`시험 당일 안내 — ${year}학년도`} desc="수능 전날·당일 체크리스트, 교시별 시각표, 반입 금지·휴대 가능 물품, 부정행위와 제재 요약">
+  <p class="crumb"><a href="/system/">수능 제도</a> › <a href={`/system/${year}/`}>{year}학년도</a> › 시험 당일 안내</p>
+  <h1>시험 당일 안내</h1>
+  <p class="disclaimer" role="note"><b>{D.basis}</b>입니다. {D.basis_note}</p>
+
+  <h2>전날 챙길 것</h2>
+  <ul class="check">{D.before.map((x) => <li>{x}</li>)}</ul>
+
+  <h2>당일</h2>
+  <ul class="check">{D.day.map((x) => <li>{x}</li>)}</ul>
+
+  <h2>교시별 시각표(일반 수험생)</h2>
+  {year !== system.years[0] && <p class="muted">{year}학년도 시간표는 아직 발표되지 않아 {system.years[0]}학년도 시간표를 싣습니다.</p>}
+  <div class="tw">
+    <table class="wide">
+      <thead><tr><th>교시</th><th>영역</th><th>시각</th></tr></thead>
+      <tbody>{system.timetable.map((t) => <tr><td>{t.period === '-' ? '—' : `${t.period}교시`}</td><td>{t.area}</td><td>{t.time}</td></tr>)}</tbody>
+    </table>
+  </div>
+
+  <h2>가지고 들어갈 수 있는 것</h2>
+  <p class="chips">{D.allowed.map((x) => <span class="tag">{x}</span>)}</p>
+
+  <h2>가지고 들어가면 안 되는 것</h2>
+  <p class="chips">{D.banned.map((x) => <span class="tag">{x}</span>)}</p>
+  <p class="muted">가지고 왔다면 1교시 시작 전에 감독관에게 내야 합니다. 시험 중 가지고 있다가 적발되면 부정행위로 처리됩니다.</p>
+
+  <h2>부정행위와 제재(요약)</h2>
+  <div class="tw">
+    <table class="wide">
+      <thead><tr><th>제재</th><th>해당하는 행동(예)</th></tr></thead>
+      <tbody>{D.penalties.map((p) => <tr><td>{p.level}</td><td class="l">{p.cases}</td></tr>)}</tbody>
+    </table>
+  </div>
+
+  <h2>원문</h2>
+  <ul class="list">{D.sources.map((s) => <li><a href={s.url} rel="noopener" target="_blank">{s.org} {s.date} — {s.title} ↗</a></li>)}</ul>
+</Base>
