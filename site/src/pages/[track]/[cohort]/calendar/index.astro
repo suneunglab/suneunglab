@@ -1,0 +1,89 @@
+---
+// 시험 캘린더 `/g2/2028/calendar/`(T6) — 03 화면설계 4절. 2026-11-24 B-13(계획서 62행 앞당김).
+// 일정은 저장소 data/schedules.yaml(확정은 근거 원문 필수, 나머지 '추정'). 달력(월)·목록 보기 전환은 브라우저 안에서.
+// 날짜가 정해진 일정이 있는 달만 달력 칸을 그리고, 달만 아는 추정 일정은 그 달 제목 아래 한 줄로 적는다.
+import Base from '../../../../layouts/Base.astro';
+import { kstToday, tracksOn } from '../../../../lib/tracks.js';
+import { SCHEDULES as S } from '../../../../lib/data.js';
+import { weekday } from '../../../../lib/content.js';
+
+export function getStaticPaths() {
+  return tracksOn(kstToday()).map((t) => ({ params: { track: `g${t.grade}`, cohort: String(t.cohort) }, props: { t } }));
+}
+const { track, cohort } = Astro.params;
+const { t } = Astro.props;
+const TODAY = kstToday();
+const events = (S.cohorts[cohort] || []).map((e) => ({ ...e, date: String(e.date), end: e.end ? String(e.end) : null, src: e.src ? S.sources[e.src] : null }))
+  .sort((a, b) => a.date.localeCompare(b.date));
+const KINDS = ['학평', '모평', '원서', '수시', '수능', '성적', '정시'];
+const months = [...new Set(events.map((e) => e.date.slice(0, 7)))];
+// 달력 칸: 그 달 1일의 요일만큼 비우고 말일까지
+function grid(ym) {
+  const [y, m] = ym.split('-').map(Number);
+  const first = new Date(Date.UTC(y, m - 1, 1)).getUTCDay();
+  const last = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  const cells = Array.from({ length: first }, () => null);
+  for (let d = 1; d <= last; d++) {
+    const iso = `${ym}-${String(d).padStart(2, '0')}`;
+    cells.push({ d, iso, ev: events.filter((e) => e.date.length === 10 && iso >= e.date && iso <= (e.end || e.date)) });
+  }
+  return { cells, monthOnly: events.filter((e) => e.date === ym) };
+}
+const fmt = (e) => (e.date.length === 7 ? `${e.date} 중` : e.end ? `${e.date}(${weekday(e.date)}) ~ ${e.end}(${weekday(e.end)})` : `${e.date}(${weekday(e.date)})`);
+---
+<Base title={`${t.label} 시험 캘린더`} desc={`${t.label} 코호트의 학력평가·모의평가·수능·원서·성적·정시 일정(확정/추정 표시와 원문 링크)`}>
+  <p class="crumb"><a href={`/${track}/${cohort}/`}>{t.label}</a> › 시험 캘린더</p>
+  <h1>시험 캘린더</h1>
+  <p class="disclaimer" role="note">'추정'은 지난해 관례로 짐작한 달입니다. 날짜는 반드시 원문(교육부·평가원·교육청·대교협)으로 확인하세요.</p>
+  <p class="legend">{KINDS.map((k) => <span class={`ev k-${k}`}>{k}</span>)}</p>
+  {events.length === 0 ? <p class="empty">이 코호트의 일정은 아직 없습니다.</p> : (
+    <>
+      <div class="viewtoggle" role="group" aria-label="보기"><button type="button" data-v="list" aria-pressed="true">목록</button><button type="button" data-v="cal" aria-pressed="false">달력</button></div>
+      <div id="v-list">
+        <div class="tw">
+          <table class="wide">
+            <thead><tr><th>날짜</th><th>일정</th><th>종류</th><th>상태</th><th>근거</th></tr></thead>
+            <tbody>{events.map((e) => (
+              <tr class={(e.end || e.date) < TODAY ? 'past' : ''}>
+                <td class="l">{fmt(e)}</td>
+                <td class="l">{e.title}{e.note && <><br><span class="muted">{e.note}</span></>}</td>
+                <td><span class={`ev k-${e.kind}`}>{e.kind}</span></td>
+                <td><span class:list={['st', e.status === '확정' ? 'ok' : 'guess']}>{e.status}</span></td>
+                <td class="l">{e.src ? <a href={e.src.url} rel="noopener" target="_blank">{e.src.org} {e.src.date} ↗</a> : <span class="muted">{e.by} 발표 전</span>}</td>
+              </tr>
+            ))}</tbody>
+          </table>
+        </div>
+      </div>
+      <div id="v-cal" hidden>
+        {months.map((ym) => { const g = grid(ym); return (
+          <section class="cal-month">
+            <h2>{ym.replace('-', '년 ')}월</h2>
+            {g.monthOnly.length > 0 && <p class="muted">날짜 미정(추정): {g.monthOnly.map((e) => e.title).join(' · ')}</p>}
+            {g.cells.some((c) => c && c.ev.length) && <div class="cal-grid">
+              {['일', '월', '화', '수', '목', '금', '토'].map((w) => <div class="dow">{w}</div>)}
+              {g.cells.map((c) => c ? <div class="d"><span class="n">{c.d}</span>{c.ev.map((e) => <span class={`ev k-${e.kind}`} title={`${e.title} (${e.status})`}>{e.short ?? e.kind}</span>)}</div> : <div />)}
+            </div>}
+          </section>
+        ); })}
+      </div>
+      <script is:inline>
+        (() => {
+          const bs = [...document.querySelectorAll('.viewtoggle button')];
+          bs.forEach((b) => b.addEventListener('click', () => {
+            bs.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+            document.getElementById('v-list').hidden = b.dataset.v !== 'list';
+            document.getElementById('v-cal').hidden = b.dataset.v !== 'cal';
+          }));
+        })();
+      </script>
+    </>
+  )}
+  {S[`note_${cohort}`] && <p class="muted">{S[`note_${cohort}`]}</p>}
+  <h2>바로가기</h2>
+  <ul class="shortcuts">
+    <li><a href={`/${track}/${cohort}/`}>코호트 첫 화면</a></li>
+    <li><a href={`/${track}/${cohort}/archive/`}>아카이브</a></li>
+    <li><a href="/system/">수능 제도</a></li>
+  </ul>
+</Base>

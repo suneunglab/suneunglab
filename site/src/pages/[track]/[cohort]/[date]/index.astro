@@ -1,9 +1,12 @@
 ---
 // 오늘의 학습 `/g3/2028/2027-03-15/`(T3) — 03 화면설계 3절.
-// 2026-11-18 B-06: 그날(빌드한 날, KST) 트랙별 페이지를 만든다. 11/09 시안 페이지 2개는 점검 기준으로 남긴다(B-13에서 실데이터로 정리).
+// 2026-11-18 B-06: 그날(빌드한 날, KST) 트랙별 페이지를 만든다. 11/09 시안 페이지 2개는 점검 기준으로 남긴다.
+// 2026-11-24 B-13: 게시 콘텐츠(content/lessons/…)가 있는 날짜는 모두 페이지를 만든다(학년이 바뀐 이전 기록은 그때 학년 트랙 주소).
+//   전날·다음날 링크(게시된 날만), D3 인쇄용 정답 모음, D6 성취기준 중복 제거, D7 한 줄 요지.
 import Base from '../../../../layouts/Base.astro';
-import { loadDay, SUBJECTS, BEHAVIOR, rich, svg, choiceMark, dots, weekday } from '../../../../lib/content.js';
+import { loadLesson, listLessons, uniq, SUBJECTS, BEHAVIOR, rich, svg, choiceMark, dots, weekday } from '../../../../lib/content.js';
 import { kstToday, tracksOn } from '../../../../lib/tracks.js';
+import { gradeOf } from '../../../../lib/calendar.js';
 import DDay from '../../../../components/DDay.astro';
 export function getStaticPaths() {
   const SAMPLE = [
@@ -12,18 +15,29 @@ export function getStaticPaths() {
   ];
   const today = kstToday();
   const live = tracksOn(today).map((t) => ({ params: { track: `g${t.grade}`, cohort: String(t.cohort), date: today }, props: { label: t.label } }));
+  // 게시 콘텐츠가 있는 모든 날짜(그날 학년 트랙) — 오늘 제공 중인 코호트 기준
+  const past = tracksOn(today).flatMap((t) => listLessons(t.cohort).map((d) => {
+    const date = d.date; const g = gradeOf(t.cohort, date);
+    return { params: { track: `g${g}`, cohort: String(t.cohort), date }, props: { label: `고${g} · ${t.cohort} 수능` } };
+  }));
   const key = (x) => `${x.params.track}/${x.params.cohort}/${x.params.date}`;
-  const seen = new Set(live.map(key));
-  return [...live, ...SAMPLE.filter((x) => !seen.has(key(x)))];
+  const seen = new Set();
+  return [...live, ...past, ...SAMPLE].filter((x) => (seen.has(key(x)) ? false : seen.add(key(x))));
 }
 const { track, cohort, date: DATE } = Astro.params; const { label } = Astro.props;
-const day = loadDay(track, DATE);
+const { day, doc } = loadLesson(cohort, track, DATE);
 const avail = SUBJECTS.filter(([k]) => day[k]);
+// 전날·다음날 = 같은 코호트에서 게시된 바로 앞·뒤 날짜(없으면 비활성, U5)
+const dates = listLessons(cohort).map((d) => d.date);
+const prevD = dates.filter((d) => d < DATE).at(-1);
+const nextD = dates.find((d) => d > DATE);
+const hrefOf = (d) => `/g${gradeOf(Number(cohort), d)}/${cohort}/${d}/`;
+const badgeText = doc?.badge === '사람 검수' ? `사람 검수(${String(doc.reviewed_at || '').slice(0, 10)})` : doc?.badge === '정정됨' ? '정정됨' : '자동 검증 통과(정답을 모르는 별도 검증 일치)';
 ---
 <Base title={`${label} ${DATE} 오늘의 학습`}>
   <p class="head-line">{label} | {DATE}({weekday(DATE)}) | <DDay cohort={cohort} from={DATE} form="page" /></p>
   <h1>오늘의 학습 — 6과목 개념과 문제</h1>
-  <div class="datenav"><span>◀ 전날</span><a href={`/${track}/${cohort}/`}>아카이브</a><span>다음날 ▶</span></div>
+  <div class="datenav">{prevD ? <a href={hrefOf(prevD)} rel="prev">◀ 전날</a> : <span>◀ 전날</span>}<a href={`/g${gradeOf(Number(cohort), kstToday())}/${cohort}/archive/`}>아카이브</a>{nextD ? <a href={hrefOf(nextD)} rel="next">다음날 ▶</a> : <span>다음날 ▶</span>}</div>
   {avail.length === 0 && <p class="empty">오늘 학습을 준비하고 있습니다. 매일 아침 게시하며, 생성이 늦어지면 07:00·09:00에 다시 시도합니다.</p>}
   {avail.length > 0 && <nav class="tabs" aria-label="과목">{avail.map(([k, n]) => <a href={`#${k}`}>{n}</a>)}</nav>}
   {avail.map(([k, n], si) => {
@@ -32,7 +46,8 @@ const avail = SUBJECTS.filter(([k]) => day[k]);
       <section class="subject" id={k}>
         <h2>{n} — {c.title}</h2>
         <div class="concept">
-          <p class="muted">{(c.standards || []).join(' ')} · 〔교과서〕 {String(c.textbook_ref || "").replace(/^〔교과서〕\s*/, "")}</p>
+          {c.summary && <p class="gist">{c.summary}</p>}
+          <p class="muted">{uniq(c.standards).join(' ')} · 〔교과서〕 {String(c.textbook_ref || "").replace(/^〔교과서〕\s*/, "")}</p>
           <dl>
             <dt>정의</dt><dd set:html={rich(c.definition)} />
             <dt>원리</dt><dd set:html={rich(c.principle)} />
@@ -51,7 +66,7 @@ const avail = SUBJECTS.filter(([k]) => day[k]);
               {(q.figures || []).map((f) => <div class="fig" set:html={svg(f)} />)}
               {q.choices && q.choices.length > 0 && <ul class="choices">{q.choices.map((ch, i) => <li><span class="mk">{choiceMark(i)}</span><span set:html={rich(ch).replace(/^<p>|<\/p>$/g, '')} /></li>)}</ul>}
               <details class="ans"><summary>정답·해설 보기</summary><div class="body"><p><b>정답 {q.answer}</b></p><div set:html={rich(q.explanation)} /></div></details>
-              <p class="verify">✓ AI 생성 · 자동 검증 통과(정답을 모르는 별도 검증 일치)</p>
+              <p class="verify">✓ AI 생성 · {badgeText}</p>
             </article>
           );
         })}
@@ -59,5 +74,16 @@ const avail = SUBJECTS.filter(([k]) => day[k]);
       </section>
     );
   })}
+  {avail.length > 0 && (
+    <section class="print-answers" aria-hidden="true">
+      <h2>정답·해설 — {label} {DATE}</h2>
+      {avail.map(([k, n]) => (
+        <div class="pa-subj">
+          <h3>{n}</h3>
+          {(day[k].problems || []).map((q) => <div class="pa-item"><p><b>문제 {q.num}</b> 정답 {q.answer}</p><div set:html={rich(q.explanation)} /></div>)}
+        </div>
+      ))}
+    </section>
+  )}
   <p class="muted">오류를 발견하면 <a href="/about/report/">오류 제보</a>로 알려 주세요(문제 번호가 자동으로 들어갑니다).</p>
 </Base>

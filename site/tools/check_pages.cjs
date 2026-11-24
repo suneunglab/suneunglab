@@ -14,7 +14,9 @@ const PAGES = [['system', '/system/'], ['changes', '/system/changes/'], ['links'
   ['license', '/about/license/'], ['corrections', '/about/corrections/'], ['report', '/about/report/'], ['bot', '/about/bot/'],
   ['privacy', '/privacy/'], ['contact', '/contact/'], ['search', '/search/'], ['404', '/404.html'],
   // B-12(2026-11-23): 수능 제도 S2·S5~S7
-  ['y2028', '/system/2028/'], ['y2029', '/system/2029/'], ['areas', '/system/2028/areas/'], ['scores', '/system/2028/scores/'], ['examday', '/system/2028/exam-day/']];
+  ['y2028', '/system/2028/'], ['y2029', '/system/2029/'], ['areas', '/system/2028/areas/'], ['scores', '/system/2028/scores/'], ['examday', '/system/2028/exam-day/'],
+  // B-13(2026-11-24): 아카이브 T4·시험 캘린더 T6
+  ['arch_g2', '/g2/2028/archive/'], ['cal_g2', '/g2/2028/calendar/'], ['arch_g1', '/g1/2029/archive/'], ['cal_g1', '/g1/2029/calendar/']];
 const SHOT = new Set((process.env.SHOT_SET || 'system,links,notices,subscribe,how,privacy').split(','));
 
 // ⑤ 깨진 내부 링크(정적 검사)

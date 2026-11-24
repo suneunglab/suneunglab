@@ -9,6 +9,9 @@
 | 수집 공지 | `data/notices/{YYYY}/{MM}.jsonl` | 한 줄 = 공지 1건 | `schema/notice.schema.json` |
 | 검증 로그 | `logs/verify/{YYYY-MM-DD}.jsonl` | 한 줄 = 문제 1건 | `schema/verify_log.schema.json` |
 
+## 사이트가 읽는 방법(B-13, 2026-11-24)
+`site/src/lib/content.js`의 `listLessons`·`loadLesson`이 `content/lessons/{코호트}/…`에서 `status: 게시`이고 `example`이 아닌 파일만 읽는다. 게시된 날짜마다 오늘의 학습 페이지(그날 학년 트랙 주소)·아카이브 목록·최근 7일·전날/다음날 링크가 생긴다. 게시 파일이 없으면 지금처럼 '준비 중'이다.
+
 ## 검사
 ```
 pip install -r tools/requirements.txt

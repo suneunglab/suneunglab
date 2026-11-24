@@ -26,6 +26,8 @@ export const EXAM_SYSTEM_ROWS = read('exam_systems');
 export const GRADE_CUTS = read('grade_cuts');
 export const ASSESSMENT = read('assessment');   // S5 영역별 평가 요소(B-12)
 export const EXAM_DAY = read('exam_day');       // S7 시험 당일 안내(B-12)
+export const SCHEDULES = read('schedules');     // T6 시험 캘린더(B-13)
+export const STANDARDS = read('standards');     // 성취기준 코드 → 슬러그(B-13, tools/gen_standards.py가 만듦)
 
 // 최소 검사 — 형식이 어긋나면 빌드를 멈춘다(08 스키마 검증 취지)
 for (const e of EXAM_YEAR_ROWS) {
@@ -38,3 +40,9 @@ for (const a of ASSESSMENT.areas) {
 for (const k of ['before', 'day', 'allowed', 'banned', 'penalties', 'sources']) {
   if (!EXAM_DAY[k]?.length) throw new Error(`exam_day: ${k} 비어 있음`);
 }
+for (const [c, list] of Object.entries(SCHEDULES.cohorts)) for (const e of list) {
+  if (!['확정', '추정'].includes(e.status)) throw new Error(`schedules ${c}: status는 확정/추정 — ${e.title}`);
+  if (e.status === '확정' && !(e.src && SCHEDULES.sources[e.src])) throw new Error(`schedules ${c}: 확정인데 근거 없음 — ${e.title}`);
+}
+if (STANDARDS.count !== STANDARDS.standards.length) throw new Error('standards: count 불일치');
+export const SLUG_OF = Object.fromEntries(STANDARDS.standards.map((s) => [s.code, s.slug]));

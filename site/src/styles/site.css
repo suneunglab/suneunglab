@@ -104,3 +104,33 @@ button.copy { font: inherit; font-size: var(--fs-sm); color: var(--link); backgr
 .timeline li::before { content: ""; position: absolute; left: -25px; top: 12px; width: 10px; height: 10px; border-radius: 50%; background: var(--brand-2); border: 2px solid var(--bg); }
 .timeline p { margin: 2px 0; font-size: var(--fs-body); }
 .timeline .when time { font-weight: 700; margin-right: 6px; }
+/* B-13(2026-11-24): 개념 카드 한 줄 요지(D7)·인쇄용 정답 모음(D3)·아카이브(T4)·시험 캘린더(T6) */
+.concept .gist { margin: 0 0 6px; font-weight: 700; font-size: var(--fs-body); }
+.print-answers { display: none; }
+@media print {
+  .prob details.ans, .datenav, .verify { display: none !important; }
+  .print-answers { display: block; break-before: page; }
+  .print-answers h2 { font-size: 16pt; }
+  .pa-subj { break-inside: avoid-page; }
+  .pa-item p { margin: 4px 0; }
+  a { color: #000; text-decoration: none; }
+}
+.filters { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; margin: 8px 0 12px; }
+.filters label { font-size: var(--fs-sm); color: var(--muted); }
+.filters select { font: inherit; padding: 4px 6px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); }
+.arch li { padding: 8px 0; border-bottom: 1px solid var(--line); }
+.arch .subs { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: var(--fs-sm); margin-top: 2px; }
+.arch .subs span b { color: var(--muted); font-weight: 600; margin-right: 4px; }
+.viewtoggle { display: flex; gap: 6px; margin: 8px 0; }
+.viewtoggle button { font: inherit; padding: 4px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); color: var(--ink); cursor: pointer; }
+.viewtoggle button[aria-pressed="true"] { border-color: var(--link); color: var(--link); font-weight: 700; }
+.cal-month { margin: 12px 0 18px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; font-size: var(--fs-sm); }
+.cal-grid .dow { text-align: center; color: var(--muted); font-weight: 700; padding: 2px 0; }
+.cal-grid .d { min-height: 44px; border: 1px solid var(--line); border-radius: 4px; padding: 2px 3px; overflow: hidden; }
+.cal-grid .d .n { color: var(--muted); }
+.cal-grid .ev { display: block; margin-top: 2px; padding: 0 3px; border-radius: 3px; font-size: 11px; line-height: 1.35; color: var(--ink); background: var(--soft); word-break: keep-all; }
+.ev.k-학평 { border-left: 3px solid #2f7d5b; } .ev.k-모평 { border-left: 3px solid #3366cc; } .ev.k-수능 { border-left: 3px solid #c0392b; }
+.ev.k-원서 { border-left: 3px solid #b8860b; } .ev.k-수시 { border-left: 3px solid #d35400; } .ev.k-성적 { border-left: 3px solid #7d3c98; } .ev.k-정시 { border-left: 3px solid #555; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: var(--fs-sm); margin: 4px 0 10px; }
+@media (max-width: 480px) { .cal-grid .ev { font-size: 10px; } .cal-grid .d { min-height: 38px; } }

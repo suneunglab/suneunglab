@@ -69,3 +69,53 @@ export const dots = (d) => '●'.repeat(d) + '○'.repeat(3 - d);
 // 수능 시험일·D-day는 calendar.js(examOf·dday)와 components/DDay.astro로 옮김(2026-11-22 B-11)
 export { dday } from './calendar.js'; // 2026-11-22 B-11: 계산은 calendar.js 한 곳
 export const weekday = (iso) => '일월화수목금토'[new Date(iso + 'T00:00:00Z').getUTCDay()];
+
+// ── B-13(2026-11-24, 계획서 62행 앞당김): 게시 콘텐츠 실데이터 경로 ─────────────────────
+// 위치: 저장소 content/lessons/{코호트}/{YYYY}/{MM}/{YYYY-MM-DD}.md (04 데이터모델 10-1절, 스키마 B-10).
+// 게시 조건: status '게시' + example 아님(견본은 content/schema/examples/에만 있고 여기서 읽지 않는다).
+// 실데이터가 없는 날은 DATA_DIR(로컬 시안 확인용 yaml)로, 그것도 없으면 빈 값('준비 중').
+const LESSON_ROOT = path.resolve(process.cwd(), '..', 'content', 'lessons');
+
+function readFront(file) {
+  const t = fs.readFileSync(file, 'utf8').replace(/\r/g, '');
+  const m = t.match(/^---\n([\s\S]*?)\n---/);
+  return m ? yaml.load(m[1]) : null;
+}
+const published = (doc) => doc && doc.status === '게시' && !doc.example;
+// YAML의 날짜(2026-11-23)는 js-yaml이 Date(UTC 자정)로 읽는다 → 'YYYY-MM-DD' 문자열로 통일
+export const isoOf = (v) => (v instanceof Date ? v.toISOString().slice(0, 10) : String(v).slice(0, 10));
+
+// 코호트의 게시 학습 파일 전체(날짜 오름차순) — 아카이브·최근 7일·전날/다음날에 쓴다
+const _cache = new Map();
+export function listLessons(cohort) {
+  const key = String(cohort);
+  if (_cache.has(key)) return _cache.get(key);
+  const dir = path.join(LESSON_ROOT, key);
+  const out = [];
+  if (fs.existsSync(dir)) {
+    for (const y of fs.readdirSync(dir).sort()) for (const m of fs.readdirSync(path.join(dir, y)).sort()) {
+      const md = path.join(dir, y, m);
+      if (!fs.statSync(md).isDirectory()) continue;
+      for (const f of fs.readdirSync(md).filter((x) => /^\d{4}-\d{2}-\d{2}\.md$/.test(x)).sort()) {
+        const doc = readFront(path.join(md, f));
+        if (published(doc) && String(doc.cohort) === key && isoOf(doc.date) === f.slice(0, 10)) out.push({ ...doc, date: isoOf(doc.date) });
+      }
+    }
+  }
+  _cache.set(key, out);
+  return out;
+}
+
+// 그날 코호트 학습 → { korean: {concept, problems, passage}, … } (DATA_DIR 시안과 같은 모양)
+export function loadLesson(cohort, track, date) {
+  const doc = listLessons(cohort).find((d) => isoOf(d.date) === date);
+  if (doc) return { source: 'content', doc, day: Object.fromEntries(doc.subjects.map((s) => [s.subject, s])) };
+  const day = loadDay(track, date);
+  return { source: Object.keys(day).length ? 'data_dir' : 'none', doc: null, day };
+}
+
+// D6(1주차 점검): 성취기준 코드 중복 제거, 순서 유지
+export const uniq = (a) => [...new Set((a || []).map((x) => String(x).trim()).filter(Boolean))];
+
+// 행동 영역 라벨(아카이브 필터)
+export const behaviorLabel = (subject, code) => BEHAVIOR[subject]?.[code] ?? code;

@@ -1,0 +1,69 @@
+---
+// 아카이브 `/g2/2028/archive/`(T4) — 03 화면설계 4절. 2026-11-24 B-13(계획서 62행 앞당김).
+// 이 코호트의 게시 학습 전체(학년이 바뀐 이전 기록도 이어서) — 월 선택·과목 필터·행동 영역 필터는 브라우저 안에서(빌드 결과는 정적 목록).
+// 성취기준 검색은 Pagefind(B-26) 연결 뒤 붙인다. 게시 전에는 빈 안내만 보인다.
+import Base from '../../../../layouts/Base.astro';
+import { kstToday, tracksOn } from '../../../../lib/tracks.js';
+import { listLessons, SUBJECTS, BEHAVIOR, uniq, weekday } from '../../../../lib/content.js';
+import { gradeOf } from '../../../../lib/calendar.js';
+
+export function getStaticPaths() {
+  return tracksOn(kstToday()).map((t) => ({ params: { track: `g${t.grade}`, cohort: String(t.cohort) }, props: { t } }));
+}
+const { track, cohort } = Astro.params;
+const { t } = Astro.props;
+const NAME = Object.fromEntries(SUBJECTS);
+const rows = listLessons(cohort).slice().reverse().map((d) => {
+  const date = d.date;
+  const subs = d.subjects.map((s) => ({ k: s.subject, title: s.concept?.title ?? '', beh: uniq((s.problems || []).map((p) => p.behavior)), std: uniq(s.concept?.standards) }));
+  return { date, month: date.slice(0, 7), href: `/g${gradeOf(Number(cohort), date)}/${cohort}/${date}/`, subs };
+});
+const months = [...new Set(rows.map((r) => r.month))];
+const behOpts = SUBJECTS.flatMap(([k, n]) => Object.entries(BEHAVIOR[k] || {}).map(([code, lab]) => ({ v: `${k}:${code}`, lab: `${n} · ${lab}` })));
+---
+<Base title={`${t.label} 아카이브`} desc={`${t.label} 코호트의 지난 오늘의 학습 목록(날짜·6과목 제목)`}>
+  <p class="crumb"><a href={`/${track}/${cohort}/`}>{t.label}</a> › 아카이브</p>
+  <h1>아카이브</h1>
+  <p class="muted">{t.label} 코호트가 지금까지 공부한 날짜별 목록입니다. 학년이 바뀐 이전 기록도 이 목록에 이어서 보입니다.</p>
+  {rows.length === 0 ? (
+    <p class="empty">아직 게시된 학습이 없습니다. 매일 게시를 시작하면(소프트 오픈 2027-01-25 예정) 날짜별로 쌓입니다. 오늘의 학습은 <a href={`/${track}/${cohort}/${kstToday()}/`}>여기</a>에서 볼 수 있습니다.</p>
+  ) : (
+    <>
+      <form class="filters" id="arch-filter" onsubmit="return false">
+        <label>월 <select name="m"><option value="">전체</option>{months.map((m) => <option value={m}>{m}</option>)}</select></label>
+        <label>과목 <select name="s"><option value="">전체</option>{SUBJECTS.map(([k, n]) => <option value={k}>{n}</option>)}</select></label>
+        <label>평가 요소 <select name="b"><option value="">전체</option>{behOpts.map((o) => <option value={o.v}>{o.lab}</option>)}</select></label>
+      </form>
+      <p class="muted" id="arch-count">{rows.length}일</p>
+      <ul class="list arch">
+        {rows.map((r) => (
+          <li data-m={r.month} data-s={r.subs.map((s) => s.k).join(' ')} data-b={r.subs.flatMap((s) => s.beh.map((b) => `${s.k}:${b}`)).join(' ')}>
+            <a href={r.href}><b>{r.date}({weekday(r.date)})</b></a>
+            <div class="subs">{r.subs.map((s) => <span data-k={s.k}><b>{NAME[s.k]}</b>{s.title}</span>)}</div>
+          </li>
+        ))}
+      </ul>
+      <script is:inline>
+        (() => {
+          const f = document.getElementById('arch-filter'); const items = [...document.querySelectorAll('.arch li')]; const cnt = document.getElementById('arch-count');
+          const run = () => {
+            const m = f.m.value, s = f.s.value, b = f.b.value; let n = 0;
+            for (const li of items) {
+              const ok = (!m || li.dataset.m === m) && (!s || li.dataset.s.split(' ').includes(s)) && (!b || li.dataset.b.split(' ').includes(b));
+              li.hidden = !ok; if (ok) n++;
+              for (const sp of li.querySelectorAll('.subs span')) sp.hidden = !!s && sp.dataset.k !== s;
+            }
+            cnt.textContent = `${n}일`;
+          };
+          f.addEventListener('change', run);
+        })();
+      </script>
+    </>
+  )}
+  <h2>바로가기</h2>
+  <ul class="shortcuts">
+    <li><a href={`/${track}/${cohort}/`}>코호트 첫 화면</a></li>
+    <li><a href={`/${track}/${cohort}/calendar/`}>시험 캘린더</a></li>
+    <li><a href="/concepts/">개념 지도</a></li>
+  </ul>
+</Base>

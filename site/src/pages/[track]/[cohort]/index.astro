@@ -1,9 +1,10 @@
 ---
 // 코호트 첫 화면 `/g3/2028/`(T2) — 03 화면설계 2절: 머리글 + 이 코호트의 시험일·D-day, 오늘의 학습, 최근 7일, 바로가기, 구독.
-// 2026-11-18 B-06. 최근 7일은 생성 콘텐츠가 쌓이면 날짜마다 6과목 제목을 보인다(B-13). 지금은 오늘만 페이지가 있다.
+// 2026-11-18 B-06. 2026-11-24 B-13: 최근 7일 = 게시 콘텐츠(content/lessons/…)에서 날짜마다 6과목 제목. 게시된 날이 하나도 없을 때만 오늘 줄에 예시 제목(demo.js).
 import Base from '../../../layouts/Base.astro';
 import { kstToday, tracksOn, TRACK_INFO, addDays } from '../../../lib/tracks.js';
-import { loadDay, SUBJECTS, weekday } from '../../../lib/content.js';
+import { loadLesson, listLessons, SUBJECTS, weekday } from '../../../lib/content.js';
+import { gradeOf } from '../../../lib/calendar.js';
 import DDay from '../../../components/DDay.astro';
 import { DEMO_TITLES } from '../../../lib/demo.js';
 
@@ -14,13 +15,20 @@ const { track, cohort } = Astro.params;
 const { t } = Astro.props;
 const TODAY = kstToday();
 const info = TRACK_INFO[t.grade];
-const day = loadDay(track, TODAY);
-const real = Object.keys(day).length > 0;
-const recent = Array.from({ length: 7 }, (_, i) => addDays(TODAY, -i)).map((d) => ({
-  date: d,
-  today: d === TODAY,
-  titles: d === TODAY ? SUBJECTS.map(([k]) => (real ? (day[k]?.concept?.title ?? '준비 중') : DEMO_TITLES[t.grade][k])) : null,
-}));
+const lessons = listLessons(cohort);
+const byDate = new Map(lessons.map((d) => [d.date, d]));
+const todayL = loadLesson(cohort, track, TODAY);
+const real = lessons.length > 0 || todayL.source !== 'none';
+const recent = Array.from({ length: 7 }, (_, i) => addDays(TODAY, -i)).map((d) => {
+  const doc = byDate.get(d);
+  const day = doc ? Object.fromEntries(doc.subjects.map((x) => [x.subject, x])) : d === TODAY ? todayL.day : null;
+  const has = day && Object.keys(day).length > 0;
+  return {
+    date: d,
+    href: d === TODAY ? `/${track}/${cohort}/${d}/` : doc ? `/g${gradeOf(Number(cohort), d)}/${cohort}/${d}/` : null,
+    titles: has ? SUBJECTS.map(([k]) => day[k]?.concept?.title ?? '준비 중') : d === TODAY && !real ? SUBJECTS.map(([k]) => DEMO_TITLES[t.grade][k]) : null,
+  };
+});
 const base = `/${track}/${cohort}`;
 ---
 <Base title={`${t.label} 코호트`}>
@@ -34,7 +42,7 @@ const base = `/${track}/${cohort}`;
   <ul class="list recent">
     {recent.map((r) => (
       <li>
-        {r.today ? <a href={`${base}/${r.date}/`}>{r.date}({weekday(r.date)})</a> : <span class="muted">{r.date}({weekday(r.date)})</span>}
+        {r.href ? <a href={r.href}>{r.date}({weekday(r.date)})</a> : <span class="muted">{r.date}({weekday(r.date)})</span>}
         {r.titles ? <span class="titles">{r.titles.join(' · ')}</span> : <span class="muted"> — 게시 전</span>}
       </li>
     ))}

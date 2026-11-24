@@ -1,0 +1,322 @@
+# 성취기준 코드 → 주소 슬러그 변환표 — tools/gen_standards.py가 만든다(손으로 고치지 않음).
+# 규칙: 02 사이트맵 6절 `[학년 + 과목약칭 + 번호]` → `학년-영문약칭-번호`. 화면에는 원래 코드, 주소에만 슬러그.
+# 출처: 교육부 고시 제2022-33호 별책(국가교육과정정보센터). 성취기준 문장은 싣지 않는다(공공누리 제2유형).
+count: 317
+standards:
+  - { code: "[10공국1-01-01]", slug: 10-ck1-01-01, subject: korean, course: 공통국어1, area: "01" }
+  - { code: "[10공국1-01-02]", slug: 10-ck1-01-02, subject: korean, course: 공통국어1, area: "01" }
+  - { code: "[10공국1-02-01]", slug: 10-ck1-02-01, subject: korean, course: 공통국어1, area: "02" }
+  - { code: "[10공국1-02-02]", slug: 10-ck1-02-02, subject: korean, course: 공통국어1, area: "02" }
+  - { code: "[10공국1-03-01]", slug: 10-ck1-03-01, subject: korean, course: 공통국어1, area: "03" }
+  - { code: "[10공국1-03-02]", slug: 10-ck1-03-02, subject: korean, course: 공통국어1, area: "03" }
+  - { code: "[10공국1-04-01]", slug: 10-ck1-04-01, subject: korean, course: 공통국어1, area: "04" }
+  - { code: "[10공국1-04-02]", slug: 10-ck1-04-02, subject: korean, course: 공통국어1, area: "04" }
+  - { code: "[10공국1-04-03]", slug: 10-ck1-04-03, subject: korean, course: 공통국어1, area: "04" }
+  - { code: "[10공국1-05-01]", slug: 10-ck1-05-01, subject: korean, course: 공통국어1, area: "05" }
+  - { code: "[10공국1-05-02]", slug: 10-ck1-05-02, subject: korean, course: 공통국어1, area: "05" }
+  - { code: "[10공국1-05-03]", slug: 10-ck1-05-03, subject: korean, course: 공통국어1, area: "05" }
+  - { code: "[10공국1-06-01]", slug: 10-ck1-06-01, subject: korean, course: 공통국어1, area: "06" }
+  - { code: "[10공국1-06-02]", slug: 10-ck1-06-02, subject: korean, course: 공통국어1, area: "06" }
+  - { code: "[10공국2-01-01]", slug: 10-ck2-01-01, subject: korean, course: 공통국어2, area: "01" }
+  - { code: "[10공국2-01-02]", slug: 10-ck2-01-02, subject: korean, course: 공통국어2, area: "01" }
+  - { code: "[10공국2-01-03]", slug: 10-ck2-01-03, subject: korean, course: 공통국어2, area: "01" }
+  - { code: "[10공국2-02-01]", slug: 10-ck2-02-01, subject: korean, course: 공통국어2, area: "02" }
+  - { code: "[10공국2-02-02]", slug: 10-ck2-02-02, subject: korean, course: 공통국어2, area: "02" }
+  - { code: "[10공국2-02-03]", slug: 10-ck2-02-03, subject: korean, course: 공통국어2, area: "02" }
+  - { code: "[10공국2-03-01]", slug: 10-ck2-03-01, subject: korean, course: 공통국어2, area: "03" }
+  - { code: "[10공국2-03-02]", slug: 10-ck2-03-02, subject: korean, course: 공통국어2, area: "03" }
+  - { code: "[10공국2-03-03]", slug: 10-ck2-03-03, subject: korean, course: 공통국어2, area: "03" }
+  - { code: "[10공국2-04-01]", slug: 10-ck2-04-01, subject: korean, course: 공통국어2, area: "04" }
+  - { code: "[10공국2-04-02]", slug: 10-ck2-04-02, subject: korean, course: 공통국어2, area: "04" }
+  - { code: "[10공국2-05-01]", slug: 10-ck2-05-01, subject: korean, course: 공통국어2, area: "05" }
+  - { code: "[10공국2-05-02]", slug: 10-ck2-05-02, subject: korean, course: 공통국어2, area: "05" }
+  - { code: "[10공국2-06-01]", slug: 10-ck2-06-01, subject: korean, course: 공통국어2, area: "06" }
+  - { code: "[10공국2-06-02]", slug: 10-ck2-06-02, subject: korean, course: 공통국어2, area: "06" }
+  - { code: "[12화언01-01]", slug: 12-sl-01-01, subject: korean, course: 화법과 언어, area: "01" }
+  - { code: "[12화언01-02]", slug: 12-sl-01-02, subject: korean, course: 화법과 언어, area: "01" }
+  - { code: "[12화언01-03]", slug: 12-sl-01-03, subject: korean, course: 화법과 언어, area: "01" }
+  - { code: "[12화언01-04]", slug: 12-sl-01-04, subject: korean, course: 화법과 언어, area: "01" }
+  - { code: "[12화언01-05]", slug: 12-sl-01-05, subject: korean, course: 화법과 언어, area: "01" }
+  - { code: "[12화언01-06]", slug: 12-sl-01-06, subject: korean, course: 화법과 언어, area: "01" }
+  - { code: "[12화언01-07]", slug: 12-sl-01-07, subject: korean, course: 화법과 언어, area: "01" }
+  - { code: "[12화언01-08]", slug: 12-sl-01-08, subject: korean, course: 화법과 언어, area: "01" }
+  - { code: "[12화언01-09]", slug: 12-sl-01-09, subject: korean, course: 화법과 언어, area: "01" }
+  - { code: "[12화언01-10]", slug: 12-sl-01-10, subject: korean, course: 화법과 언어, area: "01" }
+  - { code: "[12화언01-11]", slug: 12-sl-01-11, subject: korean, course: 화법과 언어, area: "01" }
+  - { code: "[12화언01-12]", slug: 12-sl-01-12, subject: korean, course: 화법과 언어, area: "01" }
+  - { code: "[12화언01-13]", slug: 12-sl-01-13, subject: korean, course: 화법과 언어, area: "01" }
+  - { code: "[12화언01-14]", slug: 12-sl-01-14, subject: korean, course: 화법과 언어, area: "01" }
+  - { code: "[12화언01-15]", slug: 12-sl-01-15, subject: korean, course: 화법과 언어, area: "01" }
+  - { code: "[12독작01-01]", slug: 12-rw-01-01, subject: korean, course: 독서와 작문, area: "01" }
+  - { code: "[12독작01-02]", slug: 12-rw-01-02, subject: korean, course: 독서와 작문, area: "01" }
+  - { code: "[12독작01-03]", slug: 12-rw-01-03, subject: korean, course: 독서와 작문, area: "01" }
+  - { code: "[12독작01-04]", slug: 12-rw-01-04, subject: korean, course: 독서와 작문, area: "01" }
+  - { code: "[12독작01-05]", slug: 12-rw-01-05, subject: korean, course: 독서와 작문, area: "01" }
+  - { code: "[12독작01-06]", slug: 12-rw-01-06, subject: korean, course: 독서와 작문, area: "01" }
+  - { code: "[12독작01-07]", slug: 12-rw-01-07, subject: korean, course: 독서와 작문, area: "01" }
+  - { code: "[12독작01-08]", slug: 12-rw-01-08, subject: korean, course: 독서와 작문, area: "01" }
+  - { code: "[12독작01-09]", slug: 12-rw-01-09, subject: korean, course: 독서와 작문, area: "01" }
+  - { code: "[12독작01-10]", slug: 12-rw-01-10, subject: korean, course: 독서와 작문, area: "01" }
+  - { code: "[12독작01-11]", slug: 12-rw-01-11, subject: korean, course: 독서와 작문, area: "01" }
+  - { code: "[12독작01-12]", slug: 12-rw-01-12, subject: korean, course: 독서와 작문, area: "01" }
+  - { code: "[12독작01-13]", slug: 12-rw-01-13, subject: korean, course: 독서와 작문, area: "01" }
+  - { code: "[12독작01-14]", slug: 12-rw-01-14, subject: korean, course: 독서와 작문, area: "01" }
+  - { code: "[12독작01-15]", slug: 12-rw-01-15, subject: korean, course: 독서와 작문, area: "01" }
+  - { code: "[12문학01-01]", slug: 12-lit-01-01, subject: korean, course: 문학, area: "01" }
+  - { code: "[12문학01-02]", slug: 12-lit-01-02, subject: korean, course: 문학, area: "01" }
+  - { code: "[12문학01-03]", slug: 12-lit-01-03, subject: korean, course: 문학, area: "01" }
+  - { code: "[12문학01-04]", slug: 12-lit-01-04, subject: korean, course: 문학, area: "01" }
+  - { code: "[12문학01-05]", slug: 12-lit-01-05, subject: korean, course: 문학, area: "01" }
+  - { code: "[12문학01-06]", slug: 12-lit-01-06, subject: korean, course: 문학, area: "01" }
+  - { code: "[12문학01-07]", slug: 12-lit-01-07, subject: korean, course: 문학, area: "01" }
+  - { code: "[12문학01-08]", slug: 12-lit-01-08, subject: korean, course: 문학, area: "01" }
+  - { code: "[12문학01-09]", slug: 12-lit-01-09, subject: korean, course: 문학, area: "01" }
+  - { code: "[12문학01-10]", slug: 12-lit-01-10, subject: korean, course: 문학, area: "01" }
+  - { code: "[12문학01-11]", slug: 12-lit-01-11, subject: korean, course: 문학, area: "01" }
+  - { code: "[12문학01-12]", slug: 12-lit-01-12, subject: korean, course: 문학, area: "01" }
+  - { code: "[10공수1-01-01]", slug: 10-cm1-01-01, subject: math, course: 공통수학1, area: "01" }
+  - { code: "[10공수1-01-02]", slug: 10-cm1-01-02, subject: math, course: 공통수학1, area: "01" }
+  - { code: "[10공수1-01-03]", slug: 10-cm1-01-03, subject: math, course: 공통수학1, area: "01" }
+  - { code: "[10공수1-02-01]", slug: 10-cm1-02-01, subject: math, course: 공통수학1, area: "02" }
+  - { code: "[10공수1-02-02]", slug: 10-cm1-02-02, subject: math, course: 공통수학1, area: "02" }
+  - { code: "[10공수1-02-03]", slug: 10-cm1-02-03, subject: math, course: 공통수학1, area: "02" }
+  - { code: "[10공수1-02-04]", slug: 10-cm1-02-04, subject: math, course: 공통수학1, area: "02" }
+  - { code: "[10공수1-02-05]", slug: 10-cm1-02-05, subject: math, course: 공통수학1, area: "02" }
+  - { code: "[10공수1-02-06]", slug: 10-cm1-02-06, subject: math, course: 공통수학1, area: "02" }
+  - { code: "[10공수1-02-07]", slug: 10-cm1-02-07, subject: math, course: 공통수학1, area: "02" }
+  - { code: "[10공수1-02-08]", slug: 10-cm1-02-08, subject: math, course: 공통수학1, area: "02" }
+  - { code: "[10공수1-02-09]", slug: 10-cm1-02-09, subject: math, course: 공통수학1, area: "02" }
+  - { code: "[10공수1-02-10]", slug: 10-cm1-02-10, subject: math, course: 공통수학1, area: "02" }
+  - { code: "[10공수1-02-11]", slug: 10-cm1-02-11, subject: math, course: 공통수학1, area: "02" }
+  - { code: "[10공수1-03-01]", slug: 10-cm1-03-01, subject: math, course: 공통수학1, area: "03" }
+  - { code: "[10공수1-03-02]", slug: 10-cm1-03-02, subject: math, course: 공통수학1, area: "03" }
+  - { code: "[10공수1-03-03]", slug: 10-cm1-03-03, subject: math, course: 공통수학1, area: "03" }
+  - { code: "[10공수1-04-01]", slug: 10-cm1-04-01, subject: math, course: 공통수학1, area: "04" }
+  - { code: "[10공수1-04-02]", slug: 10-cm1-04-02, subject: math, course: 공통수학1, area: "04" }
+  - { code: "[10공수2-01-01]", slug: 10-cm2-01-01, subject: math, course: 공통수학2, area: "01" }
+  - { code: "[10공수2-01-02]", slug: 10-cm2-01-02, subject: math, course: 공통수학2, area: "01" }
+  - { code: "[10공수2-01-03]", slug: 10-cm2-01-03, subject: math, course: 공통수학2, area: "01" }
+  - { code: "[10공수2-01-04]", slug: 10-cm2-01-04, subject: math, course: 공통수학2, area: "01" }
+  - { code: "[10공수2-01-05]", slug: 10-cm2-01-05, subject: math, course: 공통수학2, area: "01" }
+  - { code: "[10공수2-01-06]", slug: 10-cm2-01-06, subject: math, course: 공통수학2, area: "01" }
+  - { code: "[10공수2-01-07]", slug: 10-cm2-01-07, subject: math, course: 공통수학2, area: "01" }
+  - { code: "[10공수2-02-01]", slug: 10-cm2-02-01, subject: math, course: 공통수학2, area: "02" }
+  - { code: "[10공수2-02-02]", slug: 10-cm2-02-02, subject: math, course: 공통수학2, area: "02" }
+  - { code: "[10공수2-02-03]", slug: 10-cm2-02-03, subject: math, course: 공통수학2, area: "02" }
+  - { code: "[10공수2-02-04]", slug: 10-cm2-02-04, subject: math, course: 공통수학2, area: "02" }
+  - { code: "[10공수2-02-05]", slug: 10-cm2-02-05, subject: math, course: 공통수학2, area: "02" }
+  - { code: "[10공수2-02-06]", slug: 10-cm2-02-06, subject: math, course: 공통수학2, area: "02" }
+  - { code: "[10공수2-02-07]", slug: 10-cm2-02-07, subject: math, course: 공통수학2, area: "02" }
+  - { code: "[10공수2-02-08]", slug: 10-cm2-02-08, subject: math, course: 공통수학2, area: "02" }
+  - { code: "[10공수2-03-01]", slug: 10-cm2-03-01, subject: math, course: 공통수학2, area: "03" }
+  - { code: "[10공수2-03-02]", slug: 10-cm2-03-02, subject: math, course: 공통수학2, area: "03" }
+  - { code: "[10공수2-03-03]", slug: 10-cm2-03-03, subject: math, course: 공통수학2, area: "03" }
+  - { code: "[10공수2-03-04]", slug: 10-cm2-03-04, subject: math, course: 공통수학2, area: "03" }
+  - { code: "[10공수2-03-05]", slug: 10-cm2-03-05, subject: math, course: 공통수학2, area: "03" }
+  - { code: "[12대수01-01]", slug: 12-alg-01-01, subject: math, course: 대수, area: "01" }
+  - { code: "[12대수01-02]", slug: 12-alg-01-02, subject: math, course: 대수, area: "01" }
+  - { code: "[12대수01-03]", slug: 12-alg-01-03, subject: math, course: 대수, area: "01" }
+  - { code: "[12대수01-04]", slug: 12-alg-01-04, subject: math, course: 대수, area: "01" }
+  - { code: "[12대수01-05]", slug: 12-alg-01-05, subject: math, course: 대수, area: "01" }
+  - { code: "[12대수01-06]", slug: 12-alg-01-06, subject: math, course: 대수, area: "01" }
+  - { code: "[12대수01-07]", slug: 12-alg-01-07, subject: math, course: 대수, area: "01" }
+  - { code: "[12대수01-08]", slug: 12-alg-01-08, subject: math, course: 대수, area: "01" }
+  - { code: "[12대수02-01]", slug: 12-alg-02-01, subject: math, course: 대수, area: "02" }
+  - { code: "[12대수02-02]", slug: 12-alg-02-02, subject: math, course: 대수, area: "02" }
+  - { code: "[12대수02-03]", slug: 12-alg-02-03, subject: math, course: 대수, area: "02" }
+  - { code: "[12대수03-01]", slug: 12-alg-03-01, subject: math, course: 대수, area: "03" }
+  - { code: "[12대수03-02]", slug: 12-alg-03-02, subject: math, course: 대수, area: "03" }
+  - { code: "[12대수03-03]", slug: 12-alg-03-03, subject: math, course: 대수, area: "03" }
+  - { code: "[12대수03-04]", slug: 12-alg-03-04, subject: math, course: 대수, area: "03" }
+  - { code: "[12대수03-05]", slug: 12-alg-03-05, subject: math, course: 대수, area: "03" }
+  - { code: "[12대수03-06]", slug: 12-alg-03-06, subject: math, course: 대수, area: "03" }
+  - { code: "[12대수03-07]", slug: 12-alg-03-07, subject: math, course: 대수, area: "03" }
+  - { code: "[12미적Ⅰ-01-01]", slug: 12-calc1-01-01, subject: math, course: 미적분Ⅰ, area: "01" }
+  - { code: "[12미적Ⅰ-01-02]", slug: 12-calc1-01-02, subject: math, course: 미적분Ⅰ, area: "01" }
+  - { code: "[12미적Ⅰ-01-03]", slug: 12-calc1-01-03, subject: math, course: 미적분Ⅰ, area: "01" }
+  - { code: "[12미적Ⅰ-01-04]", slug: 12-calc1-01-04, subject: math, course: 미적분Ⅰ, area: "01" }
+  - { code: "[12미적Ⅰ-02-01]", slug: 12-calc1-02-01, subject: math, course: 미적분Ⅰ, area: "02" }
+  - { code: "[12미적Ⅰ-02-02]", slug: 12-calc1-02-02, subject: math, course: 미적분Ⅰ, area: "02" }
+  - { code: "[12미적Ⅰ-02-03]", slug: 12-calc1-02-03, subject: math, course: 미적분Ⅰ, area: "02" }
+  - { code: "[12미적Ⅰ-02-04]", slug: 12-calc1-02-04, subject: math, course: 미적분Ⅰ, area: "02" }
+  - { code: "[12미적Ⅰ-02-05]", slug: 12-calc1-02-05, subject: math, course: 미적분Ⅰ, area: "02" }
+  - { code: "[12미적Ⅰ-02-06]", slug: 12-calc1-02-06, subject: math, course: 미적분Ⅰ, area: "02" }
+  - { code: "[12미적Ⅰ-02-07]", slug: 12-calc1-02-07, subject: math, course: 미적분Ⅰ, area: "02" }
+  - { code: "[12미적Ⅰ-02-08]", slug: 12-calc1-02-08, subject: math, course: 미적분Ⅰ, area: "02" }
+  - { code: "[12미적Ⅰ-02-09]", slug: 12-calc1-02-09, subject: math, course: 미적분Ⅰ, area: "02" }
+  - { code: "[12미적Ⅰ-02-10]", slug: 12-calc1-02-10, subject: math, course: 미적분Ⅰ, area: "02" }
+  - { code: "[12미적Ⅰ-03-01]", slug: 12-calc1-03-01, subject: math, course: 미적분Ⅰ, area: "03" }
+  - { code: "[12미적Ⅰ-03-02]", slug: 12-calc1-03-02, subject: math, course: 미적분Ⅰ, area: "03" }
+  - { code: "[12미적Ⅰ-03-03]", slug: 12-calc1-03-03, subject: math, course: 미적분Ⅰ, area: "03" }
+  - { code: "[12미적Ⅰ-03-04]", slug: 12-calc1-03-04, subject: math, course: 미적분Ⅰ, area: "03" }
+  - { code: "[12미적Ⅰ-03-05]", slug: 12-calc1-03-05, subject: math, course: 미적분Ⅰ, area: "03" }
+  - { code: "[12미적Ⅰ-03-06]", slug: 12-calc1-03-06, subject: math, course: 미적분Ⅰ, area: "03" }
+  - { code: "[12확통01-01]", slug: 12-stat-01-01, subject: math, course: 확률과 통계, area: "01" }
+  - { code: "[12확통01-02]", slug: 12-stat-01-02, subject: math, course: 확률과 통계, area: "01" }
+  - { code: "[12확통01-03]", slug: 12-stat-01-03, subject: math, course: 확률과 통계, area: "01" }
+  - { code: "[12확통02-01]", slug: 12-stat-02-01, subject: math, course: 확률과 통계, area: "02" }
+  - { code: "[12확통02-02]", slug: 12-stat-02-02, subject: math, course: 확률과 통계, area: "02" }
+  - { code: "[12확통02-03]", slug: 12-stat-02-03, subject: math, course: 확률과 통계, area: "02" }
+  - { code: "[12확통02-04]", slug: 12-stat-02-04, subject: math, course: 확률과 통계, area: "02" }
+  - { code: "[12확통02-05]", slug: 12-stat-02-05, subject: math, course: 확률과 통계, area: "02" }
+  - { code: "[12확통02-06]", slug: 12-stat-02-06, subject: math, course: 확률과 통계, area: "02" }
+  - { code: "[12확통03-01]", slug: 12-stat-03-01, subject: math, course: 확률과 통계, area: "03" }
+  - { code: "[12확통03-02]", slug: 12-stat-03-02, subject: math, course: 확률과 통계, area: "03" }
+  - { code: "[12확통03-03]", slug: 12-stat-03-03, subject: math, course: 확률과 통계, area: "03" }
+  - { code: "[12확통03-04]", slug: 12-stat-03-04, subject: math, course: 확률과 통계, area: "03" }
+  - { code: "[12확통03-05]", slug: 12-stat-03-05, subject: math, course: 확률과 통계, area: "03" }
+  - { code: "[12확통03-06]", slug: 12-stat-03-06, subject: math, course: 확률과 통계, area: "03" }
+  - { code: "[12확통03-07]", slug: 12-stat-03-07, subject: math, course: 확률과 통계, area: "03" }
+  - { code: "[10공영1-01-01]", slug: 10-ce1-01-01, subject: english, course: 공통영어1, area: "01" }
+  - { code: "[10공영1-01-02]", slug: 10-ce1-01-02, subject: english, course: 공통영어1, area: "01" }
+  - { code: "[10공영1-01-03]", slug: 10-ce1-01-03, subject: english, course: 공통영어1, area: "01" }
+  - { code: "[10공영1-01-04]", slug: 10-ce1-01-04, subject: english, course: 공통영어1, area: "01" }
+  - { code: "[10공영1-01-05]", slug: 10-ce1-01-05, subject: english, course: 공통영어1, area: "01" }
+  - { code: "[10공영1-01-06]", slug: 10-ce1-01-06, subject: english, course: 공통영어1, area: "01" }
+  - { code: "[10공영1-01-07]", slug: 10-ce1-01-07, subject: english, course: 공통영어1, area: "01" }
+  - { code: "[10공영1-01-08]", slug: 10-ce1-01-08, subject: english, course: 공통영어1, area: "01" }
+  - { code: "[10공영1-02-01]", slug: 10-ce1-02-01, subject: english, course: 공통영어1, area: "02" }
+  - { code: "[10공영1-02-02]", slug: 10-ce1-02-02, subject: english, course: 공통영어1, area: "02" }
+  - { code: "[10공영1-02-03]", slug: 10-ce1-02-03, subject: english, course: 공통영어1, area: "02" }
+  - { code: "[10공영1-02-04]", slug: 10-ce1-02-04, subject: english, course: 공통영어1, area: "02" }
+  - { code: "[10공영1-02-05]", slug: 10-ce1-02-05, subject: english, course: 공통영어1, area: "02" }
+  - { code: "[10공영1-02-06]", slug: 10-ce1-02-06, subject: english, course: 공통영어1, area: "02" }
+  - { code: "[10공영1-02-07]", slug: 10-ce1-02-07, subject: english, course: 공통영어1, area: "02" }
+  - { code: "[10공영1-02-08]", slug: 10-ce1-02-08, subject: english, course: 공통영어1, area: "02" }
+  - { code: "[10공영2-01-01]", slug: 10-ce2-01-01, subject: english, course: 공통영어2, area: "01" }
+  - { code: "[10공영2-01-02]", slug: 10-ce2-01-02, subject: english, course: 공통영어2, area: "01" }
+  - { code: "[10공영2-01-03]", slug: 10-ce2-01-03, subject: english, course: 공통영어2, area: "01" }
+  - { code: "[10공영2-01-04]", slug: 10-ce2-01-04, subject: english, course: 공통영어2, area: "01" }
+  - { code: "[10공영2-01-05]", slug: 10-ce2-01-05, subject: english, course: 공통영어2, area: "01" }
+  - { code: "[10공영2-01-06]", slug: 10-ce2-01-06, subject: english, course: 공통영어2, area: "01" }
+  - { code: "[10공영2-01-07]", slug: 10-ce2-01-07, subject: english, course: 공통영어2, area: "01" }
+  - { code: "[10공영2-01-08]", slug: 10-ce2-01-08, subject: english, course: 공통영어2, area: "01" }
+  - { code: "[10공영2-02-01]", slug: 10-ce2-02-01, subject: english, course: 공통영어2, area: "02" }
+  - { code: "[10공영2-02-02]", slug: 10-ce2-02-02, subject: english, course: 공통영어2, area: "02" }
+  - { code: "[10공영2-02-03]", slug: 10-ce2-02-03, subject: english, course: 공통영어2, area: "02" }
+  - { code: "[10공영2-02-04]", slug: 10-ce2-02-04, subject: english, course: 공통영어2, area: "02" }
+  - { code: "[10공영2-02-05]", slug: 10-ce2-02-05, subject: english, course: 공통영어2, area: "02" }
+  - { code: "[10공영2-02-06]", slug: 10-ce2-02-06, subject: english, course: 공통영어2, area: "02" }
+  - { code: "[10공영2-02-07]", slug: 10-ce2-02-07, subject: english, course: 공통영어2, area: "02" }
+  - { code: "[10공영2-02-08]", slug: 10-ce2-02-08, subject: english, course: 공통영어2, area: "02" }
+  - { code: "[10공영2-02-09]", slug: 10-ce2-02-09, subject: english, course: 공통영어2, area: "02" }
+  - { code: "[12영Ⅰ-01-01]", slug: 12-eng1-01-01, subject: english, course: 영어Ⅰ, area: "01" }
+  - { code: "[12영Ⅰ-01-02]", slug: 12-eng1-01-02, subject: english, course: 영어Ⅰ, area: "01" }
+  - { code: "[12영Ⅰ-01-03]", slug: 12-eng1-01-03, subject: english, course: 영어Ⅰ, area: "01" }
+  - { code: "[12영Ⅰ-01-04]", slug: 12-eng1-01-04, subject: english, course: 영어Ⅰ, area: "01" }
+  - { code: "[12영Ⅰ-01-05]", slug: 12-eng1-01-05, subject: english, course: 영어Ⅰ, area: "01" }
+  - { code: "[12영Ⅰ-01-06]", slug: 12-eng1-01-06, subject: english, course: 영어Ⅰ, area: "01" }
+  - { code: "[12영Ⅰ-01-07]", slug: 12-eng1-01-07, subject: english, course: 영어Ⅰ, area: "01" }
+  - { code: "[12영Ⅰ-01-08]", slug: 12-eng1-01-08, subject: english, course: 영어Ⅰ, area: "01" }
+  - { code: "[12영Ⅰ-02-01]", slug: 12-eng1-02-01, subject: english, course: 영어Ⅰ, area: "02" }
+  - { code: "[12영Ⅰ-02-02]", slug: 12-eng1-02-02, subject: english, course: 영어Ⅰ, area: "02" }
+  - { code: "[12영Ⅰ-02-03]", slug: 12-eng1-02-03, subject: english, course: 영어Ⅰ, area: "02" }
+  - { code: "[12영Ⅰ-02-04]", slug: 12-eng1-02-04, subject: english, course: 영어Ⅰ, area: "02" }
+  - { code: "[12영Ⅰ-02-05]", slug: 12-eng1-02-05, subject: english, course: 영어Ⅰ, area: "02" }
+  - { code: "[12영Ⅰ-02-06]", slug: 12-eng1-02-06, subject: english, course: 영어Ⅰ, area: "02" }
+  - { code: "[12영Ⅰ-02-07]", slug: 12-eng1-02-07, subject: english, course: 영어Ⅰ, area: "02" }
+  - { code: "[12영Ⅰ-02-08]", slug: 12-eng1-02-08, subject: english, course: 영어Ⅰ, area: "02" }
+  - { code: "[12영Ⅱ-01-01]", slug: 12-eng2-01-01, subject: english, course: 영어Ⅱ, area: "01" }
+  - { code: "[12영Ⅱ-01-02]", slug: 12-eng2-01-02, subject: english, course: 영어Ⅱ, area: "01" }
+  - { code: "[12영Ⅱ-01-03]", slug: 12-eng2-01-03, subject: english, course: 영어Ⅱ, area: "01" }
+  - { code: "[12영Ⅱ-01-04]", slug: 12-eng2-01-04, subject: english, course: 영어Ⅱ, area: "01" }
+  - { code: "[12영Ⅱ-01-05]", slug: 12-eng2-01-05, subject: english, course: 영어Ⅱ, area: "01" }
+  - { code: "[12영Ⅱ-01-06]", slug: 12-eng2-01-06, subject: english, course: 영어Ⅱ, area: "01" }
+  - { code: "[12영Ⅱ-01-07]", slug: 12-eng2-01-07, subject: english, course: 영어Ⅱ, area: "01" }
+  - { code: "[12영Ⅱ-01-08]", slug: 12-eng2-01-08, subject: english, course: 영어Ⅱ, area: "01" }
+  - { code: "[12영Ⅱ-02-01]", slug: 12-eng2-02-01, subject: english, course: 영어Ⅱ, area: "02" }
+  - { code: "[12영Ⅱ-02-02]", slug: 12-eng2-02-02, subject: english, course: 영어Ⅱ, area: "02" }
+  - { code: "[12영Ⅱ-02-03]", slug: 12-eng2-02-03, subject: english, course: 영어Ⅱ, area: "02" }
+  - { code: "[12영Ⅱ-02-04]", slug: 12-eng2-02-04, subject: english, course: 영어Ⅱ, area: "02" }
+  - { code: "[12영Ⅱ-02-05]", slug: 12-eng2-02-05, subject: english, course: 영어Ⅱ, area: "02" }
+  - { code: "[12영Ⅱ-02-06]", slug: 12-eng2-02-06, subject: english, course: 영어Ⅱ, area: "02" }
+  - { code: "[12영Ⅱ-02-07]", slug: 12-eng2-02-07, subject: english, course: 영어Ⅱ, area: "02" }
+  - { code: "[12영Ⅱ-02-08]", slug: 12-eng2-02-08, subject: english, course: 영어Ⅱ, area: "02" }
+  - { code: "[12영Ⅱ-02-09]", slug: 12-eng2-02-09, subject: english, course: 영어Ⅱ, area: "02" }
+  - { code: "[10한사1-01-01]", slug: 10-kh1-01-01, subject: history, course: 한국사1, area: "01" }
+  - { code: "[10한사1-01-02]", slug: 10-kh1-01-02, subject: history, course: 한국사1, area: "01" }
+  - { code: "[10한사1-01-03]", slug: 10-kh1-01-03, subject: history, course: 한국사1, area: "01" }
+  - { code: "[10한사1-01-04]", slug: 10-kh1-01-04, subject: history, course: 한국사1, area: "01" }
+  - { code: "[10한사1-02-01]", slug: 10-kh1-02-01, subject: history, course: 한국사1, area: "02" }
+  - { code: "[10한사1-02-02]", slug: 10-kh1-02-02, subject: history, course: 한국사1, area: "02" }
+  - { code: "[10한사1-02-03]", slug: 10-kh1-02-03, subject: history, course: 한국사1, area: "02" }
+  - { code: "[10한사1-02-04]", slug: 10-kh1-02-04, subject: history, course: 한국사1, area: "02" }
+  - { code: "[10한사1-02-05]", slug: 10-kh1-02-05, subject: history, course: 한국사1, area: "02" }
+  - { code: "[10한사1-03-01]", slug: 10-kh1-03-01, subject: history, course: 한국사1, area: "03" }
+  - { code: "[10한사1-03-02]", slug: 10-kh1-03-02, subject: history, course: 한국사1, area: "03" }
+  - { code: "[10한사1-03-03]", slug: 10-kh1-03-03, subject: history, course: 한국사1, area: "03" }
+  - { code: "[10한사1-03-04]", slug: 10-kh1-03-04, subject: history, course: 한국사1, area: "03" }
+  - { code: "[10한사2-01-01]", slug: 10-kh2-01-01, subject: history, course: 한국사2, area: "01" }
+  - { code: "[10한사2-01-02]", slug: 10-kh2-01-02, subject: history, course: 한국사2, area: "01" }
+  - { code: "[10한사2-01-03]", slug: 10-kh2-01-03, subject: history, course: 한국사2, area: "01" }
+  - { code: "[10한사2-01-04]", slug: 10-kh2-01-04, subject: history, course: 한국사2, area: "01" }
+  - { code: "[10한사2-01-05]", slug: 10-kh2-01-05, subject: history, course: 한국사2, area: "01" }
+  - { code: "[10한사2-02-01]", slug: 10-kh2-02-01, subject: history, course: 한국사2, area: "02" }
+  - { code: "[10한사2-02-02]", slug: 10-kh2-02-02, subject: history, course: 한국사2, area: "02" }
+  - { code: "[10한사2-02-03]", slug: 10-kh2-02-03, subject: history, course: 한국사2, area: "02" }
+  - { code: "[10한사2-02-04]", slug: 10-kh2-02-04, subject: history, course: 한국사2, area: "02" }
+  - { code: "[10한사2-02-05]", slug: 10-kh2-02-05, subject: history, course: 한국사2, area: "02" }
+  - { code: "[10한사2-03-01]", slug: 10-kh2-03-01, subject: history, course: 한국사2, area: "03" }
+  - { code: "[10한사2-03-02]", slug: 10-kh2-03-02, subject: history, course: 한국사2, area: "03" }
+  - { code: "[10한사2-03-03]", slug: 10-kh2-03-03, subject: history, course: 한국사2, area: "03" }
+  - { code: "[10통사1-01-01]", slug: 10-is1-01-01, subject: social, course: 통합사회1, area: "01" }
+  - { code: "[10통사1-01-02]", slug: 10-is1-01-02, subject: social, course: 통합사회1, area: "01" }
+  - { code: "[10통사1-02-01]", slug: 10-is1-02-01, subject: social, course: 통합사회1, area: "02" }
+  - { code: "[10통사1-02-02]", slug: 10-is1-02-02, subject: social, course: 통합사회1, area: "02" }
+  - { code: "[10통사1-03-01]", slug: 10-is1-03-01, subject: social, course: 통합사회1, area: "03" }
+  - { code: "[10통사1-03-02]", slug: 10-is1-03-02, subject: social, course: 통합사회1, area: "03" }
+  - { code: "[10통사1-03-03]", slug: 10-is1-03-03, subject: social, course: 통합사회1, area: "03" }
+  - { code: "[10통사1-04-01]", slug: 10-is1-04-01, subject: social, course: 통합사회1, area: "04" }
+  - { code: "[10통사1-04-02]", slug: 10-is1-04-02, subject: social, course: 통합사회1, area: "04" }
+  - { code: "[10통사1-04-03]", slug: 10-is1-04-03, subject: social, course: 통합사회1, area: "04" }
+  - { code: "[10통사1-04-04]", slug: 10-is1-04-04, subject: social, course: 통합사회1, area: "04" }
+  - { code: "[10통사1-05-01]", slug: 10-is1-05-01, subject: social, course: 통합사회1, area: "05" }
+  - { code: "[10통사1-05-02]", slug: 10-is1-05-02, subject: social, course: 통합사회1, area: "05" }
+  - { code: "[10통사1-05-03]", slug: 10-is1-05-03, subject: social, course: 통합사회1, area: "05" }
+  - { code: "[10통사2-01-01]", slug: 10-is2-01-01, subject: social, course: 통합사회2, area: "01" }
+  - { code: "[10통사2-01-02]", slug: 10-is2-01-02, subject: social, course: 통합사회2, area: "01" }
+  - { code: "[10통사2-01-03]", slug: 10-is2-01-03, subject: social, course: 통합사회2, area: "01" }
+  - { code: "[10통사2-02-01]", slug: 10-is2-02-01, subject: social, course: 통합사회2, area: "02" }
+  - { code: "[10통사2-02-02]", slug: 10-is2-02-02, subject: social, course: 통합사회2, area: "02" }
+  - { code: "[10통사2-02-03]", slug: 10-is2-02-03, subject: social, course: 통합사회2, area: "02" }
+  - { code: "[10통사2-03-01]", slug: 10-is2-03-01, subject: social, course: 통합사회2, area: "03" }
+  - { code: "[10통사2-03-02]", slug: 10-is2-03-02, subject: social, course: 통합사회2, area: "03" }
+  - { code: "[10통사2-03-03]", slug: 10-is2-03-03, subject: social, course: 통합사회2, area: "03" }
+  - { code: "[10통사2-03-04]", slug: 10-is2-03-04, subject: social, course: 통합사회2, area: "03" }
+  - { code: "[10통사2-04-01]", slug: 10-is2-04-01, subject: social, course: 통합사회2, area: "04" }
+  - { code: "[10통사2-04-02]", slug: 10-is2-04-02, subject: social, course: 통합사회2, area: "04" }
+  - { code: "[10통사2-04-03]", slug: 10-is2-04-03, subject: social, course: 통합사회2, area: "04" }
+  - { code: "[10통사2-05-01]", slug: 10-is2-05-01, subject: social, course: 통합사회2, area: "05" }
+  - { code: "[10통사2-05-02]", slug: 10-is2-05-02, subject: social, course: 통합사회2, area: "05" }
+  - { code: "[10통사2-05-03]", slug: 10-is2-05-03, subject: social, course: 통합사회2, area: "05" }
+  - { code: "[10통과1-01-01]", slug: 10-isc1-01-01, subject: science, course: 통합과학1, area: "01" }
+  - { code: "[10통과1-01-02]", slug: 10-isc1-01-02, subject: science, course: 통합과학1, area: "01" }
+  - { code: "[10통과1-01-03]", slug: 10-isc1-01-03, subject: science, course: 통합과학1, area: "01" }
+  - { code: "[10통과1-01-04]", slug: 10-isc1-01-04, subject: science, course: 통합과학1, area: "01" }
+  - { code: "[10통과1-02-01]", slug: 10-isc1-02-01, subject: science, course: 통합과학1, area: "02" }
+  - { code: "[10통과1-02-02]", slug: 10-isc1-02-02, subject: science, course: 통합과학1, area: "02" }
+  - { code: "[10통과1-02-03]", slug: 10-isc1-02-03, subject: science, course: 통합과학1, area: "02" }
+  - { code: "[10통과1-02-04]", slug: 10-isc1-02-04, subject: science, course: 통합과학1, area: "02" }
+  - { code: "[10통과1-02-05]", slug: 10-isc1-02-05, subject: science, course: 통합과학1, area: "02" }
+  - { code: "[10통과1-02-06]", slug: 10-isc1-02-06, subject: science, course: 통합과학1, area: "02" }
+  - { code: "[10통과1-03-01]", slug: 10-isc1-03-01, subject: science, course: 통합과학1, area: "03" }
+  - { code: "[10통과1-03-02]", slug: 10-isc1-03-02, subject: science, course: 통합과학1, area: "03" }
+  - { code: "[10통과1-03-03]", slug: 10-isc1-03-03, subject: science, course: 통합과학1, area: "03" }
+  - { code: "[10통과1-03-04]", slug: 10-isc1-03-04, subject: science, course: 통합과학1, area: "03" }
+  - { code: "[10통과1-03-05]", slug: 10-isc1-03-05, subject: science, course: 통합과학1, area: "03" }
+  - { code: "[10통과1-03-06]", slug: 10-isc1-03-06, subject: science, course: 통합과학1, area: "03" }
+  - { code: "[10통과2-01-01]", slug: 10-isc2-01-01, subject: science, course: 통합과학2, area: "01" }
+  - { code: "[10통과2-01-02]", slug: 10-isc2-01-02, subject: science, course: 통합과학2, area: "01" }
+  - { code: "[10통과2-01-03]", slug: 10-isc2-01-03, subject: science, course: 통합과학2, area: "01" }
+  - { code: "[10통과2-01-04]", slug: 10-isc2-01-04, subject: science, course: 통합과학2, area: "01" }
+  - { code: "[10통과2-01-05]", slug: 10-isc2-01-05, subject: science, course: 통합과학2, area: "01" }
+  - { code: "[10통과2-02-01]", slug: 10-isc2-02-01, subject: science, course: 통합과학2, area: "02" }
+  - { code: "[10통과2-02-02]", slug: 10-isc2-02-02, subject: science, course: 통합과학2, area: "02" }
+  - { code: "[10통과2-02-03]", slug: 10-isc2-02-03, subject: science, course: 통합과학2, area: "02" }
+  - { code: "[10통과2-02-04]", slug: 10-isc2-02-04, subject: science, course: 통합과학2, area: "02" }
+  - { code: "[10통과2-02-05]", slug: 10-isc2-02-05, subject: science, course: 통합과학2, area: "02" }
+  - { code: "[10통과2-02-06]", slug: 10-isc2-02-06, subject: science, course: 통합과학2, area: "02" }
+  - { code: "[10통과2-03-01]", slug: 10-isc2-03-01, subject: science, course: 통합과학2, area: "03" }
+  - { code: "[10통과2-03-02]", slug: 10-isc2-03-02, subject: science, course: 통합과학2, area: "03" }
+  - { code: "[10통과2-03-03]", slug: 10-isc2-03-03, subject: science, course: 통합과학2, area: "03" }
+  - { code: "[10통과2-03-04]", slug: 10-isc2-03-04, subject: science, course: 통합과학2, area: "03" }
