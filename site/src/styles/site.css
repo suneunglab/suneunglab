@@ -129,8 +129,11 @@ button.copy { font: inherit; font-size: var(--fs-sm); color: var(--link); backgr
 .cal-grid .dow { text-align: center; color: var(--muted); font-weight: 700; padding: 2px 0; }
 .cal-grid .d { min-height: 44px; border: 1px solid var(--line); border-radius: 4px; padding: 2px 3px; overflow: hidden; }
 .cal-grid .d .n { color: var(--muted); }
-.cal-grid .ev { display: block; margin-top: 2px; padding: 0 3px; border-radius: 3px; font-size: 11px; line-height: 1.35; color: var(--ink); background: var(--soft); word-break: keep-all; }
+.cal-grid .ev { display: block; margin-top: 2px; padding: 0 3px; border-radius: 3px; font-size: 12px; line-height: 1.35; color: var(--ink); background: var(--soft); word-break: keep-all; }
 .ev.k-학평 { border-left: 3px solid #2f7d5b; } .ev.k-모평 { border-left: 3px solid #3366cc; } .ev.k-수능 { border-left: 3px solid #c0392b; }
 .ev.k-원서 { border-left: 3px solid #b8860b; } .ev.k-수시 { border-left: 3px solid #d35400; } .ev.k-성적 { border-left: 3px solid #7d3c98; } .ev.k-정시 { border-left: 3px solid #555; }
 .legend { display: flex; flex-wrap: wrap; gap: 6px 10px; font-size: var(--fs-sm); margin: 4px 0 10px; }
-@media (max-width: 480px) { .cal-grid .ev { font-size: 10px; } .cal-grid .d { min-height: 38px; } }
+@media (max-width: 480px) { .cal-grid .d { min-height: 38px; padding: 2px 1px; } .cal-grid .ev { padding: 0 1px; } }
+
+/* 63행 점검(2026-11-25): 화면에는 안 보이고 화면 읽기 프로그램에만 읽히는 글(홈 h1) */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }

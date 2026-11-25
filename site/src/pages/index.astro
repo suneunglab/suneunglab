@@ -29,6 +29,7 @@ const lines = active.map((c, i) => {
 const schedule = upcoming(TODAY, 3);
 ---
 <Base title="홈">
+  <h1 class="sr-only">수능랩 — 수능 개념·문제·입시 소식을 매일 정리하는 연구실</h1>
   <div class="band">{band.map((e) => <DDay cohort={e.year} from={TODAY} form="chip" />)}</div>
   <p class="muted">기준일 {TODAY} · 날마다 트랙별 6과목 핵심 개념과 연습문제를 새로 씁니다.</p>
   {demo && <p class="demo" role="note">지금 보이는 과목 제목은 화면 확인용 예시입니다. 공개 전에 실제 학습 콘텐츠로 바뀝니다.</p>}

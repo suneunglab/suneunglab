@@ -4,7 +4,7 @@
 // 2026-11-24 B-13: 게시 콘텐츠(content/lessons/…)가 있는 날짜는 모두 페이지를 만든다(학년이 바뀐 이전 기록은 그때 학년 트랙 주소).
 //   전날·다음날 링크(게시된 날만), D3 인쇄용 정답 모음, D6 성취기준 중복 제거, D7 한 줄 요지.
 import Base from '../../../../layouts/Base.astro';
-import { loadLesson, listLessons, uniq, SUBJECTS, BEHAVIOR, rich, svg, choiceMark, dots, weekday } from '../../../../lib/content.js';
+import { loadLesson, listLessons, uniq, figureHtml, SUBJECTS, BEHAVIOR, rich, svg, choiceMark, dots, weekday } from '../../../../lib/content.js';
 import { kstToday, tracksOn } from '../../../../lib/tracks.js';
 import { gradeOf } from '../../../../lib/calendar.js';
 import DDay from '../../../../components/DDay.astro';
@@ -63,7 +63,7 @@ const badgeText = doc?.badge === '사람 검수' ? `사람 검수(${String(doc.r
               <div class="meta"><b>문제 {q.num}</b><span>난이도 {dots(q.difficulty || 1)}</span><span class="badge">{BEHAVIOR[k]?.[q.behavior] ?? q.behavior}</span><span>{q.points}점</span><span>{q.standard}</span></div>
               {q.passage && q.passage !== prev && <div class="passage" set:html={rich(q.passage)} />}
               <div set:html={rich(q.stem)} />
-              {(q.figures || []).map((f) => <div class="fig" set:html={svg(f)} />)}
+              {(q.figures || []).map((f) => <div class="fig" set:html={figureHtml(f, doc?._dir)} />)}
               {q.choices && q.choices.length > 0 && <ul class="choices">{q.choices.map((ch, i) => <li><span class="mk">{choiceMark(i)}</span><span set:html={rich(ch).replace(/^<p>|<\/p>$/g, '')} /></li>)}</ul>}
               <details class="ans"><summary>정답·해설 보기</summary><div class="body"><p><b>정답 {q.answer}</b></p><div set:html={rich(q.explanation)} /></div></details>
               <p class="verify">✓ AI 생성 · {badgeText}</p>

@@ -12,6 +12,7 @@ const slots = slotsOn(kstToday());
   <p>트랙마다 매일 06:00 전후 '오늘의 학습' 1건을 보내 드립니다. RSS 주소는 트랙(고1·고2·고3) 기준이라 학년이 바뀌어도 다시 구독할 필요가 없습니다.</p>
   <p class="demo" role="note">RSS와 텔레그램 채널은 공개 전에 엽니다. 지금은 주소만 미리 보여 드립니다.</p>
 
+  <h2>트랙별 구독</h2>
   <div class="cards">
     {slots.map((s) => {
       const feed = `${SITE.url}/g${s.grade}/feed.xml`;

@@ -98,7 +98,7 @@ export function listLessons(cohort) {
       if (!fs.statSync(md).isDirectory()) continue;
       for (const f of fs.readdirSync(md).filter((x) => /^\d{4}-\d{2}-\d{2}\.md$/.test(x)).sort()) {
         const doc = readFront(path.join(md, f));
-        if (published(doc) && String(doc.cohort) === key && isoOf(doc.date) === f.slice(0, 10)) out.push({ ...doc, date: isoOf(doc.date) });
+        if (published(doc) && String(doc.cohort) === key && isoOf(doc.date) === f.slice(0, 10)) out.push({ ...doc, date: isoOf(doc.date), _dir: md });
       }
     }
   }
@@ -112,6 +112,20 @@ export function loadLesson(cohort, track, date) {
   if (doc) return { source: 'content', doc, day: Object.fromEntries(doc.subjects.map((s) => [s.subject, s])) };
   const day = loadDay(track, date);
   return { source: Object.keys(day).length ? 'data_dir' : 'none', doc: null, day };
+}
+
+// 그림(63행 점검, 2026-11-25): 게시 파일의 figures는 'fig/이름.svg'(학습 파일 옆 fig 폴더) → 파일을 읽어 넣는다.
+//   시안 yaml(DATA_DIR)은 SVG 글을 바로 담으므로 그대로. 그림에 <title>이 없으면 빌드를 멈춘다(대체 텍스트 필수, 06 SVG 규칙).
+export function figureHtml(f, dir) {
+  let t = String(f || '');
+  if (/^fig\/[a-z0-9-]+\.svg$/.test(t)) {
+    const p = path.join(dir || '', t);
+    if (!dir || !fs.existsSync(p)) throw new Error(`그림 파일 없음: ${p}`);
+    t = fs.readFileSync(p, 'utf8');
+    if (!/<title>[^<]+<\/title>/.test(t)) throw new Error(`그림에 <title>(대체 텍스트) 없음: ${p}`);
+  }
+  t = svg(t);
+  return /<svg[^>]*\srole=/.test(t) ? t : t.replace(/<svg\b/, '<svg role="img"');
 }
 
 // D6(1주차 점검): 성취기준 코드 중복 제거, 순서 유지
