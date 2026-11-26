@@ -1,9 +1,10 @@
 # 운영 대상 8곳(05 11절, 크롤링대상목록 v1.1) — 실험 3(11/07) 5곳 + 11/11 확대 3곳(연세대·인천 학력평가·경남 공지 — K2 robots 판정 허용) — 05 크롤러명세 7·8절, 03_참고자료\크롤링대상목록.md(2026-10-02 확인)
 # org_id·board_id = 공지 파일의 영문 약칭(notice.schema: 소문자·숫자·하이픈). item/title/date 선택자를 비워 두면 자동 추정(행 안 링크 + 날짜).
-# adapter: 비워 두면 일반 목록 어댑터(core/adapter.py ListAdapter). 특수 어댑터는 B-15에서 이름으로 등록.
-- {id: moe-press, org_id: moe, board_id: press, org: 교육부, board: 보도자료, type: html, url: "https://www.moe.go.kr/boardCnts/listRenew.do?boardID=294&m=020402&s=moe", keywords: A, category_default: policy, enabled: true,
+# adapter: 비워 두면 일반 목록 어댑터(core/adapter.py ListAdapter). 특수 어댑터(B-15, adapters/): moe·kcue. kice_watch: 평가원 소식 감지(05 7-3).
+# moe 2쪽 수집(pages: 2, page_param: …)과 예비 경로 정책브리핑(fallback: {…})은 실제 실행 환경에서 쪽 이동 파라미터·목록 주소를 확인한 뒤(B-16) 넣는다.
+- {id: moe-press, org_id: moe, board_id: press, org: 교육부, board: 보도자료, type: html, url: "https://www.moe.go.kr/boardCnts/listRenew.do?boardID=294&m=020402&s=moe", keywords: A, category_default: policy, enabled: true, adapter: moe, kice_watch: true,
    onclick_re: "goView\\('(\\d+)', '(\\d+)'", link_template: "https://www.moe.go.kr/boardCnts/viewRenew.do?boardID={0}&boardSeq={1}&lev=0&m=020402&s=moe"}
-- {id: kcue-press, org_id: kcue, board_id: press, org: 한국대학교육협의회, board: 보도자료, type: html, url: "https://www.kcue.or.kr/news/sub02/sub01.php", keywords: null, category_default: policy, enabled: true}
+- {id: kcue-press, org_id: kcue, board_id: press, org: 한국대학교육협의회, board: 보도자료, type: html, url: "https://www.kcue.or.kr/news/sub02/sub01.php", keywords: null, category_default: policy, enabled: true, adapter: kcue, kice_watch: true}
 - {id: sen-exam, org_id: sen, board_id: exam, org: 서울특별시교육청, board: 학력평가자료실, type: html, url: "https://www.sen.go.kr/user/bbs/BD_selectBbsList.do?q_bbsSn=1036", keywords: null, category_default: mock, enabled: true,
    table_cols: {title: 5, year: 2, month: 4}}  # 날짜 칸 없음 → 연도·월(일자 01 표시), 링크는 목록 주소(첨부 미수집, C1)
 - {id: snu, org_id: snu, board_id: admission, org: 서울대학교, board: 입학 공지, type: html, url: "https://admission.snu.ac.kr/undergraduate/notice", keywords: null, category_default: etc, enabled: true,

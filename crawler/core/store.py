@@ -20,6 +20,13 @@ class NoticeStore:
                                     o = json.loads(line); self.items[o["id"]] = o
         self.loaded = len(self.items)
 
+    def same_post(self, it):
+        """05 7-4: 같은 기관·게시판에서 정규화 제목 + 게시일이 같은 다른 id(예비 경로 정책브리핑 ↔ 교육부)가 있으면 그 id."""
+        for o in self.items.values():
+            if o["id"] != it["id"] and o["org"] == it["org"] and o["board"] == it["board"] and o["title"] == it["title"] and o["posted"] == it["posted"]:
+                return o["id"]
+        return None
+
     def upsert(self, it):
         """→ 'new' | 'changed' | 'same'"""
         o = self.items.get(it["id"])

@@ -14,8 +14,10 @@ SCHEMA = Draft202012Validator(json.load(open(os.path.join(REPO, "content", "sche
 
 
 def serve(d):
-    h = functools.partial(http.server.SimpleHTTPRequestHandler, directory=d); h.log_message = lambda *a: None
-    srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), h)
+    class Quiet(http.server.SimpleHTTPRequestHandler):
+        def log_message(self, *a):
+            pass
+    srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(Quiet, directory=d))
     threading.Thread(target=srv.serve_forever, daemon=True).start(); return srv
 
 

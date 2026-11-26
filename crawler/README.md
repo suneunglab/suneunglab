@@ -20,7 +20,17 @@
 - `sources.yaml`: 운영 대상 8곳. `org_id`·`board_id`는 공지 파일의 약칭이다.
 - `keywords.yaml`: 05 7-2절 키워드 사전
 - `categories.yaml`: 05 9절 분류표
-- `core/adapter.py`: 어댑터 틀. 일반 게시판은 설정만으로 동작한다. 평가원 소식 감지 같은 특수 어댑터는 B-15에서 등록한다.
+- `core/adapter.py`: 어댑터 틀. 일반 게시판은 설정만으로 동작한다.
+- `adapters/`(B-15, 2026-11-26): 특수 어댑터. 계획서 66~68행이 적은 경로를 따랐다.
+  - `moe`: 교육부 보도자료. 상세 주소 규칙을 적용하고, 여러 쪽(`pages`·`page_param`)을 수집한다.
+  - `kcue`: 대교협 보도자료. 어디가 링크는 뺀다(결정 16).
+  - `kice`: 평가원 소식 감지(05 7-3). 평가원 누리집은 수집하지 않는다. `kice_watch: true`인 교육부·대교협 공지 제목에서 아래 소식을 감지한다.
+    - 감지 대상: 시행계획, 시험일, 채점 결과·성적 통지, 모의평가
+    - 감지하면 분류를 보정하고, 비공개 `kice_signals.json`에 신호를 남긴다.
+    - 시행계획·시험일이면 `[정보]` 알림을 낸다.
+- 예비 경로(05 7-4): 원본에 `fallback: {…}`을 두면, 원본이 3일 연속 이상할 때 그 경로로 수집한다. 제목과 게시일이 같은 글은 하나만 저장한다.
+  - 정책브리핑 목록 주소와 교육부 2쪽 파라미터는 실제 실행 환경에서 확인한 뒤(B-16) `sources.yaml`에 넣는다.
+- `tests/test_adapters.py`: B-15 오프라인 시험이다. 교육부·대교협 어댑터, 평가원 감지 규칙 6개, 예비 경로, 중복 제거를 확인한다.
 - `tests/test_core.py`: 오프라인 시험. 아래 항목과 notice 스키마 통과를 확인한다.
   - 다섯 경우(표·목록·구조 변경·robots 금지·접속 실패)
   - 재실행 시 중복 0
@@ -33,6 +43,6 @@
 ```
 pip install -r crawler/requirements.txt
 python crawler/run.py --state ../suneunglab-crawler-test/crawler-state      # 공지는 data/notices/에 쌓인다
-python crawler/tests/test_core.py                                           # 오프라인 시험(jsonschema 필요)
+python crawler/tests/test_core.py && python crawler/tests/test_adapters.py   # 오프라인 시험(jsonschema 필요)
 ```
 - `[주의]`가 있으면 종료 코드는 1이다. 매일 예약 실행(GitHub Actions), 상태를 비공개 저장소에 커밋하는 절차, 수집 시각 조정은 B-16(12/04)에서 정한다. 텔레그램 발송은 B-17이다.
