@@ -45,4 +45,11 @@ pip install -r crawler/requirements.txt
 python crawler/run.py --state ../suneunglab-crawler-test/crawler-state      # 공지는 data/notices/에 쌓인다
 python crawler/tests/test_core.py && python crawler/tests/test_adapters.py   # 오프라인 시험(jsonschema 필요)
 ```
-- `[주의]`가 있으면 종료 코드는 1이다. 매일 예약 실행(GitHub Actions), 상태를 비공개 저장소에 커밋하는 절차, 수집 시각 조정은 B-16(12/04)에서 정한다. 텔레그램 발송은 B-17이다.
+- `[주의]`가 있으면 종료 코드는 1이다. 텔레그램 발송은 B-17이다.
+
+## 매일 예약 실행(B-16, `.github/workflows/crawl.yml`)
+- 시각: 매일 04:20 KST(cron `20 19 * * *` UTC). Actions 예약 실행은 30~87분 늦게 시작하므로(K-10) 05:00보다 앞당겼다. 놓친 날은 Actions 화면의 `crawl` → Run workflow(수동 실행)로 다시 돌린다. `only` 칸에 출처 id를 쉼표로 넣으면 일부만 돈다.
+- 공개 결과 `data/notices/`만 이 저장소에 커밋한다(커밋 전 검사 통과 필수).
+- 상태 파일은 비공개 저장소 `suneunglab/suneunglab-crawler-test`의 `crawler-state/`에 커밋한다. 저장소 Secrets에 `PRIVATE_REPO_TOKEN`(그 저장소 하나만, Contents 읽기·쓰기)이 있어야 한다. 없으면 상태를 임시 폴더에만 두고 경고를 남긴다(공지 수집은 되지만 연속 실패 감지·예비 경로 전환이 꺼진다).
+- 워크플로는 예약·수동 실행만 받는다(풀 리퀘스트로는 돌지 않으므로 Secrets가 외부 코드에 노출되지 않는다).
+- 첫 실행(2026-11-28 11:04 KST, 수동): 8곳 모두 ok, 새 공지 74건(교육부 2·대교협 10·서울교육청 10·서울대 10·고려대 27·연세대 10·인천교육청 5·경남교육청 0[해당 글 없음]).
